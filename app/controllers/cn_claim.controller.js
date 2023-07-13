@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const db = require("../models");
 const Claim = db.cn_claim;
@@ -110,7 +111,7 @@ exports.create = function (req, res) {
 						batch: req.body.claims[i - 1].batch,
 						divisionName: req.body.claims[i - 1].division,
 						materialName: req.body.claims[i - 1].product,
-						//particulars			:	'',
+						//particulars:	'',
 						mrp: req.body.claims[i - 1].mrp,
 						pts: req.body.claims[i - 1].pts,
 						ptr: req.body.claims[i - 1].ptr,
@@ -285,3 +286,18 @@ exports.fileUpload = (req, res) => {
 		res.status(200).send({ status: 200, message: "success", data: [] });
 	});
 };
+
+exports.submitClaim = (req, res) => {
+	if (req.body.length) {
+		let count = 1;
+
+		req.body.forEach(element => {
+			Claim.findByIdAndUpdate(element._id, element).exec((err, success) => {
+				if (req.body.length === count) {
+					res.status(200).send({ status: 200, message: "success", data: [] });
+				}
+				count++;
+			});
+		});
+	}
+}

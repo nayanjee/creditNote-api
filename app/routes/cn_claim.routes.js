@@ -25,8 +25,11 @@ module.exports = function(app) {
   app.post("/api/claim/create", controller.create);
   app.post("/api/claim/update", controller.update);
   app.post("/api/getClaim", controller.getClaim);
+  app.post("/api/claim/submit", controller.submitClaim);
   app.post("/api/claim/fileUpload", controller.fileUpload);
+
   app.put("/api/claim/delete", controller.delete);
   app.put("/api/claim/deleteFile", controller.deleteFile);
+
   app.get("/api/getClaim/:claimId", controller.getClaimById);
 };
