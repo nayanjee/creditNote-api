@@ -2,15 +2,15 @@
     * @description      : 
     * @author           : nayan.prakash
     * @group            : 
-    * @created          : 17/06/2023 - 14:08:26
+    * @created          : 02/08/2023 - 14:08:26
     * 
     * MODIFICATION LOG
     * - Version         : 1.0.0
-    * - Date            : 17/06/2023
+    * - Date            : 02/08/2023
     * - Author          : nayan.prakash
     * - Modification    : 
 **/
-const controller = require("../controllers/common_product.controller");
+const controller = require("../controllers/common_distributor.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -22,8 +22,8 @@ module.exports = function(app) {
   });
 
 
-  app.get("/api/product/all", controller.getAll);
-  app.get("/api/product/:material", controller.getProductById);
+  // app.get("/api/distributor/all", controller.getAll);
+  app.get("/api/getCustomer/:plant", controller.getCustomerByPlant);
 
-  app.post("/api/productImport", controller.importProduct);
+  app.post("/api/distributorImport", controller.importDistributor);
 };

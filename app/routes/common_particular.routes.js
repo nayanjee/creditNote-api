@@ -10,7 +10,7 @@
     * - Author          : nayan.prakash
     * - Modification    : 
 **/
-const controller = require("../controllers/common_product.controller");
+const controller = require("../controllers/common_particular.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -21,9 +21,7 @@ module.exports = function(app) {
     next();
   });
 
+  app.get("/api/category/all", controller.getAllCategory);
 
-  app.get("/api/product/all", controller.getAll);
-  app.get("/api/product/:material", controller.getProductById);
-
-  app.post("/api/productImport", controller.importProduct);
+  app.get("/api/particulars/all", controller.getAll);
 };

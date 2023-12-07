@@ -1,38 +1,19 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const StockiestSchema = new mongoose.Schema({
-    plant: {
+const DistributorSchema = new mongoose.Schema({
+    customerId: {
         type: Number,
         default: null
     },
-    customerId: {
+    plant: {
         type: Number,
+        ref: "com_product",
         default: null
     },
     organization: {
         type: String,
         default: null
-    },
-    city: {
-        type: String,
-        default: null
-    },
-    district: {
-        type: String,
-        default: null
-    },
-    state: {
-        type: String,
-        default: null
-    },
-    zipcode: {
-		type: String,
-		default: null
-	},
-    country: {
-        type: String,
-        default: 'india'
     },
     isActive: {
         type: Boolean,
@@ -56,10 +37,10 @@ const StockiestSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "gen_user",
         default: null
-    }
+    },
 }, {
     timestamps: true
 });
 
-mongoose.model('com_stockiest', StockiestSchema);
-module.exports = mongoose.model('com_stockiest');
+mongoose.model('com_distributor', DistributorSchema);
+module.exports = mongoose.model('com_distributor');

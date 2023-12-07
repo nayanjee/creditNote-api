@@ -1,5 +1,5 @@
 const db = require("../models");
-const Portal = db.portal;
+const Portal = db.gen_portal;
 
 exports.getAll = function(req, res) {
   Portal.find({isActive:true, isDeleted:false}, (error, result) => {

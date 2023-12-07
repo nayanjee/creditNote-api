@@ -10,7 +10,7 @@ const User = require("../models/generic_user.model");
 const Admin = require("../models/generic_admin.model");
 const Portal = require("../models/generic_portal.model");
 const Log = require("../models/la_log.model");
-//const Authority = require("../models/authority.model");
+const Permission = require("../models/generic_permission.model");
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -68,7 +68,6 @@ exports.signin = (req, res) => {
   User.findOne({ email: req.body.email, type: req.body.type, isDeleted: false })
     .populate("portals")
     .exec(async (err, user) => {
-      console.log('USER---', user);
       if (err) return res.status(500).send({ status: 500, message: MSG.somethingWrong });
       if (!user) return res.status(200).send({ status: 400, message: MSG.noUser });
 
@@ -95,8 +94,7 @@ exports.signin = (req, res) => {
       });
 
       // If user has permission for portal access, get how much access they have
-      //const authorities = await getAuthority(user._id, portalId);
-      const authorities = [];
+      const permissions = await getPermission(user._id, portalId);
       
       const data = {
         id:           user._id,
@@ -106,7 +104,7 @@ exports.signin = (req, res) => {
         image:        user.image,
         portal:       portalId,
         stockiest:    user.stockiest,
-        permissions:  authorities
+        permissions:  permissions
       }
 
       res.status(200).send({ auth: true, status: 200, message: 'Successfully logged.', token: token, data: data });
@@ -125,15 +123,16 @@ exports.changePassword = (req, res) => {
     });
 }
 
-// const getAuthority = (adminId, portalId) => {
-//   return new Promise(resolve => {
-//     Authority.findOne({ adminId: adminId, portalId: portalId }).exec((err, res) => {
-//       if (res && res.authority.length) {
-//         resolve(res.authority);
-//       } else {
-//         resolve([]);
-//       }
-//     });
-//   });
-// };
+const getPermission = (userId, portalId) => {
+  return new Promise(resolve => {
+    Permission.findOne({ userId: userId, portalId: portalId }).exec((err, res) => {
+      console.log('res---', res);
+      if (res && res.permissions.length) {
+        resolve(res.permissions);
+      } else {
+        resolve([]);
+      }
+    });
+  });
+};
 

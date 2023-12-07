@@ -17,6 +17,10 @@ const StockiestSchema = new mongoose.Schema({
       type: Number,   // 1=>Head Office, 2=>Field Officer, 3=>Stockist
       default: 1
   },
+  isOfficer: {
+    type: Boolean,
+    default: false
+  },
   image: {
       type: String,
       default: "6.jpg"

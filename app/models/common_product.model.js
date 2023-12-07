@@ -2,17 +2,57 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ProductSchema = new mongoose.Schema({
-    division: {
+    material: {
         type: Number,
-        default: 0
+        default: null
+    },
+    plant: {
+        type: Number,
+        default: null
     },
     materialName: {
         type: String,
         default: null
     },
-    material: {
-        type: Number,
+    materialType: {
+        type: String,
         default: null
+    },
+    materialGroup: {
+        type: String,
+        default: null
+    },
+    baseUnitMeasure: {
+        type: String,
+        default: null
+    },
+    purchaseGroup: {
+        type: Number,
+        default: 0
+    },
+    mrpType: {
+        type: String,
+        default: null
+    },
+    division: {
+        type: Number,
+        default: 0
+    },
+    mrp: {
+        type: Number,
+        default: 0
+    },
+    ptd: {
+        type: Number,
+        default: 0
+    },
+    ptr: {
+        type: Number,
+        default: 0
+    },
+    pts: {
+        type: Number,
+        default: 0
     },
     isActive: {
         type: Boolean,
@@ -28,6 +68,11 @@ const ProductSchema = new mongoose.Schema({
         default: null
     },
     updatedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "gen_user",
+        default: null
+    },
+    deletedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "gen_user",
         default: null

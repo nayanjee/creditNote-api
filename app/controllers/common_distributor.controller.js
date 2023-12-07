@@ -1,34 +1,25 @@
 const xlsx = require('xlsx');
+const mongoose = require("mongoose");
+const moment = require("moment");
 
-const uploadFile = require("../middlewares/uploadProduct");
+const uploadFile = require("../middlewares/uploadDistributor");
 
 const db = require("../models");
-const Product = db.com_product;
+const Distributor = db.com_distributor;
 
-exports.getAll = function (req, res) {
-	const condition = {
-		isActive: true, 
-		isDeleted: false
-	};
+exports.getCustomerByPlant = function (req, res) {
+	if (!req.params.plant) return res.status(200).send({ status: 400, param: 'plant', message: 'plant is required.' });
 
-	Product.find(condition, (error, result) => {
-		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
-		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
-
-		res.status(200).send({ status: 200, message: 'Success', data: result });
-	}).sort({ materialName: 1 });
-};
-
-exports.getProductById = function (req, res) {
-	Product.findOne({ material: req.params.material }, (error, result) => {
+	Distributor.find({plant: req.params.plant}, (error, result) => {
 		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
 		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
 
 		res.status(200).send({ status: 200, message: 'Success', data: result });
 	});
-};
+}
 
-exports.importProduct = async (req, res) => {
+
+exports.importDistributor = async (req, res) => {
   try {
     // To upload file
     await uploadFile(req, res);
@@ -48,7 +39,7 @@ exports.importProduct = async (req, res) => {
 
 let convertExcelToJson  = (fileName) => {
   return new Promise(resolve => {
-    const filePath = './public/uploads/product/' + fileName;
+    const filePath = './public/uploads/distributor/' + fileName;
     if (!filePath) {
       resolve({status:400, message: 'FilePath is null!'});
     }
@@ -78,27 +69,17 @@ let convertExcelToJson  = (fileName) => {
       // change key name in array of objects
       const newArray = parsedData.map(item => {
         return { 
-        	material: item['Material'],
-          plant: item['Plant'],
-        	materialName: item['Material Description'],
-          materialType: item['Material Type'],
-          materialGroup: item['Material Group'],
-          baseUnitMeasure: item['Base Unit of Measure'],
-          purchaseGroup: item['Purchasing Group'],
-          mrpType: item['MRP Type'],
-        	division: item['Division'],
-        	mrp: item['MRP'],
-        	ptd: item['PTD'],
-        	ptr: item['PTR'],
-        	pts: item['PTS']
+        	customerId: item['Customer Code'],
+          	plant: item['Plant'],
+        	organization: item['Customer Name']
         };
       });
 
       (async function(){
-        const removeAll = await Product.deleteMany({});   // Remove all documents before insert.
+        const removeAll = await Distributor.deleteMany({});   // Remove all documents before insert.
         
-        const insertMany = await Product.insertMany(newArray);
-        resolve({status:200, message: "Data added successfully."});
+        const insertMany = await Distributor.insertMany(newArray);
+        resolve({status:200, message: "Success"});
       })();
     } else {
       return res.status(200).send({status:400, message: "This file has more than 1 lakh rows, please upload it by reducing it."});

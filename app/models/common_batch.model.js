@@ -2,39 +2,47 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const BatchSchema = new mongoose.Schema({
-    batch: {
-        type: String,
+    material: {
+        type: Number,
+        ref: "com_product",
+        default: null
+    },
+    plant: {
+        type: Number,
         default: null
     },
     division: {
         type: Number,
         ref: "com_division",
         default: 0
-    },
-    material: {
-        type: Number,
-        ref: "com_product",
+    }, 
+    batch: {
+        type: String,
         default: null
     },
-    mrp: {
-        type: Number,
-        default: null
-    },
-    ptd: {
-        type: Number,
-        default: null
-    },
-    ptr: {
-        type: Number,
-        default: null
-    },
-    pts: {
-        type: Number,
+    manufacturedOn: {
+        type: Date,
         default: null
     },
     expireOn: {
         type: Date,
         default: null
+    },
+    mrp: {
+        type: Number,
+        default: 0
+    },
+    ptd: {
+        type: Number,
+        default: 0
+    },
+    ptr: {
+        type: Number,
+        default: 0
+    },
+    pts: {
+        type: Number,
+        default: 0
     },
     isActive: {
         type: Boolean,

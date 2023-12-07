@@ -96,8 +96,11 @@ require("./app/routes/common_batch.routes")(app);
 require("./app/routes/common_product.routes")(app);
 require("./app/routes/common_division.routes")(app);
 require("./app/routes/common_stockiest.routes")(app);
+require("./app/routes/common_particular.routes")(app);
+require("./app/routes/common_distributor.routes")(app);
 
 require("./app/routes/cn_claim.routes")(app);
+require("./app/routes/cn_sales.routes")(app);
 require("./app/routes/cn_setting.routes")(app);
 
 

@@ -23,4 +23,6 @@ module.exports = function(app) {
 
 
   app.get("/api/batch/all", controller.getAll);
+
+  app.post("/api/batchImport", controller.importBatch);
 };

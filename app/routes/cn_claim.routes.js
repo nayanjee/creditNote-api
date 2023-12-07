@@ -22,11 +22,19 @@ module.exports = function(app) {
   });
 
 
+  app.post("/api/getClaim", controller.getClaim);
   app.post("/api/claim/create", controller.create);
   app.post("/api/claim/update", controller.update);
-  app.post("/api/getClaim", controller.getClaim);
   app.post("/api/claim/submit", controller.submitClaim);
   app.post("/api/claim/fileUpload", controller.fileUpload);
+  app.post("/api/claim/updateClaim", controller.updateClaim);
+  app.post("/api/claimForApproval", controller.claimForApproval);
+  app.post("/api/getApprovedClaim", controller.getApprovedClaim);
+  app.post("/api/getClaimForApproval", controller.getClaimForApproval);
+  app.post("/api/claim/saveCategory", controller.saveClaimCategory);
+  app.post("/api/claim/saveParticulars", controller.saveClaimParticulars);
+  app.post("/api/claim/saveSupplyProof", controller.saveClaimSupplyProof);
+  app.post("/api/claim/savePurchaseOrder", controller.saveClaimPurchaseOrder);
 
   app.put("/api/claim/delete", controller.delete);
   app.put("/api/claim/deleteFile", controller.deleteFile);

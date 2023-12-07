@@ -3,6 +3,7 @@ const moment = require("moment");
 
 const db = require("../models");
 const Claim = db.cn_claim;
+const Sales = db.cn_sales;
 const ClaimFile = db.cn_claim_file;
 
 exports.getClaim = function (req, res) {
@@ -15,6 +16,7 @@ exports.getClaim = function (req, res) {
 	if (req.body.division) condition.divisionName = req.body.division;
 	if (req.body.type) condition.claimType = req.body.type;
 
+	console.log('condition---', condition);
 	Claim.aggregate([
 		{
 			$match: condition
@@ -260,6 +262,21 @@ exports.update = function (req, res) {
 	}
 }
 
+exports.updateClaim = function (req, res) {
+	console.log(req.body);
+	// const reqData = {
+	// 	supplyProof: req.body.supplyProof
+	// }
+	
+	Claim.findByIdAndUpdate(req.body._id, req.body).exec((err, success) => {
+		if (err) {
+      return res.status(400).send({ status: 400, message: "somethingWrong" });
+    } else {
+      res.status(200).send({ status: 200, message: "success", data: [] });
+    }
+	});
+}
+
 exports.delete = (req, res) => {
   Claim.deleteOne({ _id: req.body._id }, function (err, data) {
     if (err) {
@@ -300,4 +317,155 @@ exports.submitClaim = (req, res) => {
 			});
 		});
 	}
+}
+
+exports.claimForApproval = (req, res) => {
+	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
+
+	let condition = { isDraft: false, isSubmit: true };
+	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
+	if (req.body.year) condition.claimYear = parseInt(req.body.year);
+	if (req.body.division) condition.divisionName = req.body.division;
+	if (req.body.type) condition.claimType = req.body.type;
+
+	Claim.aggregate([
+		{
+			$match: condition
+		}, {
+			$lookup: {
+				from: "cn_claim_files",
+				localField: "_id",
+				foreignField: "claimId",
+				as: "files"
+			}
+		}, {
+			$lookup: {
+				from: "com_batches",
+				localField: "batch",
+				foreignField: "batch",
+				as: "batchDetail"
+			}
+		}
+	]).exec((error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	});
+}
+
+exports.getClaimForApproval = (req, res) => {
+	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
+
+	let condition = { isDraft: false, isSubmit: true };
+	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
+	if (req.body.year) condition.claimYear = parseInt(req.body.year);
+	if (req.body.invoice) condition.invoice = req.body.invoice;
+	if (req.body.type) condition.claimType = req.body.type;
+
+	Claim.aggregate([
+		{
+			$match: condition
+		}, {
+			$lookup: {
+				from: "cn_claim_files",
+				localField: "_id",
+				foreignField: "claimId",
+				as: "files"
+			}
+		}
+	]).exec((error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	});
+}
+
+exports.getApprovedClaim = (req, res) => {
+	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
+	console.log(req.body);
+	let condition = { isDraft: false, isSubmit: true };
+	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+	if (req.body.claimType) condition.claimType = req.body.claimType;
+	if (req.body.divisionName) condition.divisionName = req.body.divisionName;
+	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
+	if (req.body.year) condition.claimYear = parseInt(req.body.year);
+	if (req.body.status) {
+		if (req.body.status === 'approved') condition.isApproved = true;
+		else if (req.body.status === 'unapproved') condition.isUnapproved = true;
+	}
+
+	console.log('condition---', condition);
+	Claim.aggregate([
+		{
+			$match: condition
+		}, {
+			$lookup: {
+				from: "cn_claim_files",
+				localField: "_id",
+				foreignField: "claimId",
+				as: "files"
+			}
+		}
+	]).exec((error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	});
+}
+
+exports.saveClaimParticulars = (req, res) => {
+	const reqData = {
+		particulars: req.body.particulars
+	}
+	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
+		if (err) {
+      return res.status(400).send({ status: 400, message: "somethingWrong" });
+    } else {
+      res.status(200).send({ status: 200, message: "success", data: [] });
+    }
+	});
+}
+
+exports.saveClaimCategory = (req, res) => {
+	const reqData = {
+		category: req.body.category
+	}
+	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
+		if (err) {
+      return res.status(400).send({ status: 400, message: "somethingWrong" });
+    } else {
+      res.status(200).send({ status: 200, message: "success", data: [] });
+    }
+	});
+}
+
+exports.saveClaimSupplyProof = (req, res) => {
+	const reqData = {
+		supplyProof: req.body.supplyProof
+	}
+	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
+		if (err) {
+      return res.status(400).send({ status: 400, message: "somethingWrong" });
+    } else {
+      res.status(200).send({ status: 200, message: "success", data: [] });
+    }
+	});
+}
+
+exports.saveClaimPurchaseOrder = (req, res) => {
+	const reqData = {
+		purchaseOrder: req.body.purchaseOrder
+	}
+	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
+		if (err) {
+      return res.status(400).send({ status: 400, message: "somethingWrong" });
+    } else {
+      res.status(200).send({ status: 200, message: "success", data: [] });
+    }
+	});
 }
