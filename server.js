@@ -64,7 +64,7 @@ const Portal = db.portal;
 
 db.mongoose
   // .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-  .connect("mongodb://laadmin:LaRenon@2023@localhost:27017/dataplex?authSource=admin&retryWrites=false", {
+  .connect("mongodb://laadmin:LaRenon@2023@65.1.70.106:27017/dataplex?authSource=admin&retryWrites=false", {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
