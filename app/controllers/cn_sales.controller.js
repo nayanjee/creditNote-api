@@ -94,10 +94,11 @@ exports.allocatedQuantity = (req, res) => {
 
 exports.remainingQuantity = (req, res) => {
 	const condition = {
-		billToParty: parseInt(req.body.customerId),
+		billToParty: 201099,
 		batch: req.body.batch,
 		billDocType: 'ZDLF'
 	};
+	console.log('remainingQuantity condition--', condition);
 
 	Sales.aggregate([
 		{
@@ -108,7 +109,7 @@ exports.remainingQuantity = (req, res) => {
 				localField: "billDocNumber",
 				foreignField: "billDocNumber",
 				as: "remainingData"
-			} 
+			}
 		}, {
 			$lookup: {
 				from: "com_distributors",
@@ -129,17 +130,18 @@ exports.remainingQuantity = (req, res) => {
 
 exports.hoInvoice = (req, res) => {
 	const today = moment().format("YYYY-MM-DDT00:00:00.000[Z]");
-	const backDate = moment(today).subtract(12, 'months').format("YYYY-MM-DDT00:00:00.000[Z]");
+	const backDate = moment(today).subtract(24, 'months').format("YYYY-MM-DDT00:00:00.000[Z]");
 
 	const condition = {
 		batch: req.body.batch,
-		billToParty: req.body.customerId,
+		billToParty: 201099,
 		billDocType: { $in: ['ZDSF', 'ZDBS'] },
 		billDocDate: {
 			$gte: new Date(backDate), 
 			$lt: new Date(today)
 		}
 	};
+	console.log('hoInvoice condition---', condition);
 
 	SalesHo.findOne(condition, (error, result) => {
 		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });

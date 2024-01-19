@@ -16,7 +16,7 @@ exports.getClaim = function (req, res) {
 	if (req.body.division) condition.divisionName = req.body.division;
 	if (req.body.type) condition.claimType = req.body.type;
 
-	console.log('condition---', condition);
+	console.log('condition-----', condition);
 	Claim.aggregate([
 		{
 			$match: condition

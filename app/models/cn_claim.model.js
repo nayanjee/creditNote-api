@@ -76,7 +76,7 @@ const ClaimSchema = new mongoose.Schema({
   },
   margin: {
     type: Number,
-    default: null
+    default: 10
   },
   freeQuantity: {
     type: Number,
