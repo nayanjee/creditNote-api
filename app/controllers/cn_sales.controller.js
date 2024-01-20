@@ -94,7 +94,7 @@ exports.allocatedQuantity = (req, res) => {
 
 exports.remainingQuantity = (req, res) => {
 	const condition = {
-		billToParty: 201099,
+		billToParty: parseInt(req.body.customerId),
 		batch: req.body.batch,
 		billDocType: 'ZDLF'
 	};
@@ -109,7 +109,7 @@ exports.remainingQuantity = (req, res) => {
 				localField: "billDocNumber",
 				foreignField: "billDocNumber",
 				as: "remainingData"
-			}
+			} 
 		}, {
 			$lookup: {
 				from: "com_distributors",
@@ -134,7 +134,7 @@ exports.hoInvoice = (req, res) => {
 
 	const condition = {
 		batch: req.body.batch,
-		billToParty: 201099,
+		billToParty: req.body.customerId,
 		billDocType: { $in: ['ZDSF', 'ZDBS'] },
 		billDocDate: {
 			$gte: new Date(backDate), 
