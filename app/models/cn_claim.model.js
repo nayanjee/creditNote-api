@@ -132,6 +132,38 @@ const ClaimSchema = new mongoose.Schema({
     default: null
   },
 
+  isFoApproved: {
+    type: Boolean,
+    default: false
+  },
+  foApprovedOn: {
+    type: Date,
+    default: null
+  },
+  foApprovedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "gen_user",
+    default: null
+  },
+
+  isFoUnapproved: {
+    type: Boolean,
+    default: false
+  },
+  foUnapprovedOn: {
+    type: Date,
+    default: null
+  },
+  foUnapprovedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "gen_user",
+    default: null
+  },
+  foUnapprovedComment: {
+    type: String,
+    default: null
+  },
+
   isApproved: {
     type: Boolean,
     default: false
@@ -167,6 +199,11 @@ const ClaimSchema = new mongoose.Schema({
   canceledBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "gen_user",
+    default: null
+  },
+
+  updateComment: {
+    type: String,
     default: null
   },
   
