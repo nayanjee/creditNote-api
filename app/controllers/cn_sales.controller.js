@@ -98,6 +98,7 @@ exports.remainingQuantity = (req, res) => {
 		batch: req.body.batch,
 		billDocType: 'ZDLF'
 	};
+	console.log('remainingQuantity condition--', condition);
 
 	Sales.aggregate([
 		{
@@ -129,7 +130,7 @@ exports.remainingQuantity = (req, res) => {
 
 exports.hoInvoice = (req, res) => {
 	const today = moment().format("YYYY-MM-DDT00:00:00.000[Z]");
-	const backDate = moment(today).subtract(12, 'months').format("YYYY-MM-DDT00:00:00.000[Z]");
+	const backDate = moment(today).subtract(24, 'months').format("YYYY-MM-DDT00:00:00.000[Z]");
 
 	const condition = {
 		batch: req.body.batch,
@@ -140,6 +141,7 @@ exports.hoInvoice = (req, res) => {
 			$lt: new Date(today)
 		}
 	};
+	console.log('hoInvoice condition---', condition);
 
 	SalesHo.findOne(condition, (error, result) => {
 		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });

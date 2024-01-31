@@ -10,6 +10,10 @@ const DivisionSchema = new mongoose.Schema({
 		type: String,
 		default: null
 	},
+    plant: {
+        type: Number,
+        default: null
+    },
 	isActive: {
         type: Boolean,
         default: true
