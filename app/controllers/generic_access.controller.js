@@ -1,4 +1,5 @@
 const db = require("../models");
+const mongoose = require("mongoose");
 const Access = db.gen_access;
 
 exports.add = (req, res) => {
@@ -16,8 +17,8 @@ exports.add = (req, res) => {
 
 
 exports.getall = function(req, res) {
-  console.log(req.body);
-  Access.find({ portalId:req.body.portalId, isActive:true, isDeleted:false }, (error, result) => {
+  //console.log(req.body);
+  Access.find({ portalId: mongoose.Types.ObjectId(req.params.portalId), isActive:true, isDeleted:false }, (error, result) => {
     if (error) return res.status(400).send({status:400, message: 'problemFindingRecord'});
     if (!result) return res.status(200).send({status:400, message: 'noRecord'});
 

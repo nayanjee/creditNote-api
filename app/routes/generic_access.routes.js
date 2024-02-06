@@ -11,5 +11,5 @@ module.exports = function(app) {
 
 
   app.post("/api/access/create", controller.add);
-  app.post("/api/access/getall", controller.getall);
+  app.get("/api/access/getall/:portalId", controller.getall);
 };
