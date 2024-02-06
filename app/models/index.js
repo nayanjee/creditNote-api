@@ -15,13 +15,14 @@ mongoose.Promise = global.Promise;
 
 const db = {};
 
-db.mongoose     = mongoose;
-db.log          = require("./la_log.model");
-db.gen_user         = require("./generic_user.model");
-db.gen_crud         = require("./generic_crud.model");
-db.gen_admin        = require("./generic_admin.model");
-db.gen_portal       = require("./generic_portal.model");
-db.gen_permission   = require("./generic_permission.model");
+db.mongoose = mongoose;
+db.log = require("./la_log.model");
+db.gen_user = require("./generic_user.model");
+db.gen_crud = require("./generic_crud.model");
+db.gen_admin = require("./generic_admin.model");
+db.gen_portal = require("./generic_portal.model");
+db.gen_permission = require("./generic_permission.model");
+db.gen_access = require("./generic_access.model");
 
 db.com_batch = require("./common_batch.model");
 db.com_product = require("./common_product.model");

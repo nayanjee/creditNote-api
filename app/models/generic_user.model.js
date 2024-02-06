@@ -2,28 +2,28 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // This table is being used as an "Exclude Stockiest".
-const StockiestSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   name: {             // User name OR Organization name
-      type: String,
-      default: null
+    type: String,
+    default: null
   },
   email: {
-      type: String,
+    type: String,
   },
   password: {
-      type: String,
+    type: String,
   },
   type: {
-      type: Number,   // 1=>Head Office, 2=>Field Officer, 3=>Stockist
-      default: 1
+    type: Number,   // 1=>Head Office, 2=>Field Officer, 3=>Stockist
+    default: 1
   },
   isOfficer: {
     type: Boolean,
     default: false
   },
   image: {
-      type: String,
-      default: "6.jpg"
+    type: String,
+    default: "6.jpg"
   },
   portals: [
     {
@@ -31,14 +31,16 @@ const StockiestSchema = new mongoose.Schema({
       ref: "gen_portal"
     }
   ],
+  divisions: [],
+  distributors: [],
   stockiest: [],
   isActive: {
-      type: Boolean,
-      default: true
+    type: Boolean,
+    default: true
   },
   isDeleted: {
-      type: Boolean,
-      default: false
+    type: Boolean,
+    default: false
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -54,5 +56,5 @@ const StockiestSchema = new mongoose.Schema({
   timestamps: true
 });
 
-mongoose.model('gen_user', StockiestSchema);
+mongoose.model('gen_user', UserSchema);
 module.exports = mongoose.model('gen_user');

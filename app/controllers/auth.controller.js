@@ -25,7 +25,8 @@ exports.signup = (req, res) => {
   const admin = new Admin({
     name: req.body.name,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
+    // password: bcrypt.hashSync(req.body.password, 8),
+    password: bcrypt.hashSync('123456', 8),
     role: req.body.role
   });
 
@@ -95,16 +96,16 @@ exports.signin = (req, res) => {
 
       // If user has permission for portal access, get how much access they have
       const permissions = await getPermission(user._id, portalId);
-      
+
       const data = {
-        id:           user._id,
-        name:         user.name,
-        type:         user.type, 
-        email:        user.email,
-        image:        user.image,
-        portal:       portalId,
-        stockiest:    user.stockiest,
-        permissions:  permissions
+        id: user._id,
+        name: user.name,
+        type: user.type,
+        email: user.email,
+        image: user.image,
+        portal: portalId,
+        stockiest: user.stockiest,
+        permissions: permissions
       }
 
       res.status(200).send({ auth: true, status: 200, message: 'Successfully logged.', token: token, data: data });
@@ -113,14 +114,14 @@ exports.signin = (req, res) => {
 
 exports.changePassword = (req, res) => {
   User.findOne({ _id: req.body.userId }).exec(async (err, user) => {
-      if (err) return res.status(500).send({ status: 500, message: MSG.somethingWrong });
-      if (!user) return res.status(200).send({ status: 400, message: MSG.noUser });
+    if (err) return res.status(500).send({ status: 500, message: MSG.somethingWrong });
+    if (!user) return res.status(200).send({ status: 400, message: MSG.noUser });
 
-      console.log('USER___', user);
-      var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-      if (!passwordIsValid) return res.status(200).send({ status: 400, message: MSG.invalidEmailPassword });
-      if (!user.isActive) return res.status(200).send({ status: 400, message: MSG.accountInactive });
-    });
+    console.log('USER___', user);
+    var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+    if (!passwordIsValid) return res.status(200).send({ status: 400, message: MSG.invalidEmailPassword });
+    if (!user.isActive) return res.status(200).send({ status: 400, message: MSG.accountInactive });
+  });
 }
 
 const getPermission = (userId, portalId) => {

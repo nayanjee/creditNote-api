@@ -24,7 +24,7 @@ module.exports = function(app) {
 
   app.get("/api/stockiest/all", controller.getAll);
   //app.get("/api/stockiest/:stockiests", controller.getStockiests);
-
+  app.post("/api/stockiest/distributorStockiest", controller.distributorStockiest);
   app.post("/api/getStockiest", controller.stockiestByIds);
   app.post("/api/stockiestImport", controller.importStockiest);
 };

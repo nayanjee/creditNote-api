@@ -86,3 +86,21 @@ let convertExcelToJson  = (fileName) => {
     }
   });
 };
+
+exports.getAll = function(req, res) {
+  Distributor.find({ isActive:true, isDeleted:false }, (error, result) => {
+    if (error) return res.status(400).send({status:400, message: 'problemFindingRecord'});
+    if (!result) return res.status(200).send({status:400, message: 'noRecord'});
+
+    res.status(200).send({status:200, message:'Success', data:result});
+  });
+};
+
+exports.getDistributor9000 = function(req, res) {
+  Distributor.find({ plant:{ $gt: 9000, $lte: 9999 },isActive:true, isDeleted:false }, (error, result) => {
+    if (error) return res.status(400).send({status:400, message: 'problemFindingRecord'});
+    if (!result) return res.status(200).send({status:400, message: 'noRecord'});
+
+    res.status(200).send({status:200, message:'Success', data:result});
+  });
+};
