@@ -26,6 +26,10 @@ const ClaimSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  divisionId: {
+    type: Number,
+    default: null
+  },
   divisionName: {
     type: String,
     default: null
@@ -206,7 +210,7 @@ const ClaimSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "gen_user",

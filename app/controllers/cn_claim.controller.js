@@ -41,7 +41,7 @@ exports.getClaimById = function (req, res) {
 
 	Claim.aggregate([
 		{
-			$match: {_id: mongoose.Types.ObjectId(req.params.claimId)}
+			$match: { _id: mongoose.Types.ObjectId(req.params.claimId) }
 		}, {
 			$lookup: {
 				from: "cn_claim_files",
@@ -53,7 +53,7 @@ exports.getClaimById = function (req, res) {
 	]).exec((error, result) => {
 		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
 		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
-		
+
 		res.status(200).send({ status: 200, message: 'Success', data: result });
 	});
 }
@@ -83,8 +83,10 @@ exports.create = function (req, res) {
 						claimYear: claimYear,
 						invoice: req.body.def_invoice,
 						batch: req.body.def_batch,
+						divisionId: req.body.def_divisionId,
 						divisionName: req.body.def_division,
 						materialName: req.body.def_product,
+						material: req.body.def_productId,
 						//particulars			:	'',
 						mrp: req.body.def_mrp,
 						pts: req.body.def_pts,
@@ -111,8 +113,10 @@ exports.create = function (req, res) {
 						claimYear: claimYear,
 						invoice: req.body.claims[i - 1].invoice,
 						batch: req.body.claims[i - 1].batch,
+						divisionId: req.body.claims[i - 1].divisionId,
 						divisionName: req.body.claims[i - 1].division,
 						materialName: req.body.claims[i - 1].product,
+						material: req.body.claims[i - 1].productId,
 						//particulars:	'',
 						mrp: req.body.claims[i - 1].mrp,
 						pts: req.body.claims[i - 1].pts,
@@ -185,8 +189,10 @@ exports.update = function (req, res) {
 						claimYear: claimYear,
 						invoice: req.body.def_invoice,
 						batch: req.body.def_batch,
+						divisionId: req.body.def_divisionId,
 						divisionName: req.body.def_division,
 						materialName: req.body.def_product,
+						material: req.body.def_productId,
 						//particulars			:	'',
 						mrp: req.body.def_mrp,
 						pts: req.body.def_pts,
@@ -213,8 +219,10 @@ exports.update = function (req, res) {
 						claimYear: claimYear,
 						invoice: req.body.claims[i - 1].invoice,
 						batch: req.body.claims[i - 1].batch,
+						divisionId: req.body.claims[i - 1].divisionId,
 						divisionName: req.body.claims[i - 1].division,
 						materialName: req.body.claims[i - 1].product,
+						material: req.body.claims[i - 1].productId,
 						//particulars			:	'',
 						mrp: req.body.claims[i - 1].mrp,
 						pts: req.body.claims[i - 1].pts,
@@ -267,34 +275,34 @@ exports.updateClaim = function (req, res) {
 	// const reqData = {
 	// 	supplyProof: req.body.supplyProof
 	// }
-	
+
 	Claim.findByIdAndUpdate(req.body._id, req.body).exec((err, success) => {
 		if (err) {
-      return res.status(400).send({ status: 400, message: "somethingWrong" });
-    } else {
-      res.status(200).send({ status: 200, message: "success", data: [] });
-    }
+			return res.status(400).send({ status: 400, message: "somethingWrong" });
+		} else {
+			res.status(200).send({ status: 200, message: "success", data: [] });
+		}
 	});
 }
 
 exports.delete = (req, res) => {
-  Claim.deleteOne({ _id: req.body._id }, function (err, data) {
-    if (err) {
-      return res.status(400).send({ status: 400, message: "somethingWrong" });
-    } else {
-      res.status(200).send({ status: 200, message: "successfullyDeleted", data: [] });
-    }
-  });
+	Claim.deleteOne({ _id: req.body._id }, function (err, data) {
+		if (err) {
+			return res.status(400).send({ status: 400, message: "somethingWrong" });
+		} else {
+			res.status(200).send({ status: 200, message: "successfullyDeleted", data: [] });
+		}
+	});
 };
 
 exports.deleteFile = (req, res) => {
-  ClaimFile.deleteOne({ _id: req.body._id }, function (err, data) {
-    if (err) {
-      return res.status(400).send({ status: 400, message: "somethingWrong" });
-    } else {
-      res.status(200).send({ status: 200, message: "successfullyDeleted", data: [] });
-    }
-  });
+	ClaimFile.deleteOne({ _id: req.body._id }, function (err, data) {
+		if (err) {
+			return res.status(400).send({ status: 400, message: "somethingWrong" });
+		} else {
+			res.status(200).send({ status: 200, message: "successfullyDeleted", data: [] });
+		}
+	});
 };
 
 exports.fileUpload = (req, res) => {
@@ -424,10 +432,10 @@ exports.saveClaimParticulars = (req, res) => {
 	}
 	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
 		if (err) {
-      return res.status(400).send({ status: 400, message: "somethingWrong" });
-    } else {
-      res.status(200).send({ status: 200, message: "success", data: [] });
-    }
+			return res.status(400).send({ status: 400, message: "somethingWrong" });
+		} else {
+			res.status(200).send({ status: 200, message: "success", data: [] });
+		}
 	});
 }
 
@@ -437,10 +445,10 @@ exports.saveClaimCategory = (req, res) => {
 	}
 	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
 		if (err) {
-      return res.status(400).send({ status: 400, message: "somethingWrong" });
-    } else {
-      res.status(200).send({ status: 200, message: "success", data: [] });
-    }
+			return res.status(400).send({ status: 400, message: "somethingWrong" });
+		} else {
+			res.status(200).send({ status: 200, message: "success", data: [] });
+		}
 	});
 }
 
@@ -450,10 +458,10 @@ exports.saveClaimSupplyProof = (req, res) => {
 	}
 	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
 		if (err) {
-      return res.status(400).send({ status: 400, message: "somethingWrong" });
-    } else {
-      res.status(200).send({ status: 200, message: "success", data: [] });
-    }
+			return res.status(400).send({ status: 400, message: "somethingWrong" });
+		} else {
+			res.status(200).send({ status: 200, message: "success", data: [] });
+		}
 	});
 }
 
@@ -463,9 +471,9 @@ exports.saveClaimPurchaseOrder = (req, res) => {
 	}
 	Claim.findByIdAndUpdate(req.body.id, reqData).exec((err, success) => {
 		if (err) {
-      return res.status(400).send({ status: 400, message: "somethingWrong" });
-    } else {
-      res.status(200).send({ status: 200, message: "success", data: [] });
-    }
+			return res.status(400).send({ status: 400, message: "somethingWrong" });
+		} else {
+			res.status(200).send({ status: 200, message: "success", data: [] });
+		}
 	});
 }
