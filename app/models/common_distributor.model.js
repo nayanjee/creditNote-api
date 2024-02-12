@@ -2,13 +2,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const DistributorSchema = new mongoose.Schema({
+    plant: {
+        type: Number,
+        ref: "com_product",
+        default: null
+    },
     customerId: {
         type: Number,
         default: null
     },
-    plant: {
+    distributorPlant: {
         type: Number,
-        ref: "com_product",
         default: null
     },
     organization: {

@@ -37,6 +37,7 @@ db.cn_sales = require("./cn_sales.model");
 db.cn_setting = require("./cn_setting.model");
 db.cn_sales_ho = require("./cn_sales_ho.model");
 db.cn_claim_file = require("./cn_claim_file.model");
+db.cn_distributor_division = require("./cn_distributor_division.model");
 db.cn_sales_remaining_quantity = require("./cn_sales_remaining_quantity.model");
 db.cn_sales_allocated_quantity = require("./cn_sales_allocated_quantity.model");
 

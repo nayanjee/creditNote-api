@@ -6,6 +6,7 @@ const uploadFile = require("../middlewares/uploadDistributor");
 
 const db = require("../models");
 const Distributor = db.com_distributor;
+const DistributorDivision = db.cn_distributor_division;
 
 exports.getCustomerByPlant = function (req, res) {
 	if (!req.params.plant) return res.status(200).send({ status: 400, param: 'plant', message: 'plant is required.' });
@@ -98,6 +99,15 @@ exports.getAll = function(req, res) {
 
 exports.getDistributor9000 = function(req, res) {
   Distributor.find({ plant:{ $gt: 9000, $lte: 9999 },isActive:true, isDeleted:false }, (error, result) => {
+    if (error) return res.status(400).send({status:400, message: 'problemFindingRecord'});
+    if (!result) return res.status(200).send({status:400, message: 'noRecord'});
+
+    res.status(200).send({status:200, message:'Success', data:result});
+  });
+};
+
+exports.distributorDivison = function(req, res) {
+  DistributorDivision.find({ plant: req.body.plant , isActive:true, isDeleted:false }, (error, result) => {
     if (error) return res.status(400).send({status:400, message: 'problemFindingRecord'});
     if (!result) return res.status(200).send({status:400, message: 'noRecord'});
 

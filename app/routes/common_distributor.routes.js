@@ -28,4 +28,5 @@ module.exports = function(app) {
   app.get("/api/getCustomer/:plant", controller.getCustomerByPlant);
 
   app.post("/api/distributorImport", controller.importDistributor);
+  app.post("/api/distributor/distributorDivison", controller.distributorDivison);
 };

@@ -100,10 +100,10 @@ let convertExcelToJson  = (fileName) => {
 
 exports.distributorStockiest = function(req, res) {
 
-  Stockiest.find({ plant: { $in: req.body } , isActive:true, isDeleted:false }, (error, result) => {
+  Stockiest.find({ plant: req.body.plant , isActive:true, isDeleted:false }, (error, result) => {
     if (error) return res.status(400).send({status:400, message: 'problemFindingRecord'});
     if (!result) return res.status(200).send({status:400, message: 'noRecord'});
 
     res.status(200).send({status:200, message:'Success', data:result});
-  }).sort({plant:1, organization:1});
+  }).sort({organization:1});
 };
