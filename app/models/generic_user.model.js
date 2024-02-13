@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 // This table is being used as an "Exclude Stockiest".
 const UserSchema = new mongoose.Schema({
-  type: {
-    type: Number,   // 1=>Head Office, 2=>Field Officer, 3=>Stockist, 4=>Distributor
-    default: 1
+  userType: {
+    type: String,   // Head Office, Field Officer, Stockist, Distributor
+    default: 'ho'
   },
   name: {           // User name OR Organization name
     type: String,
@@ -13,14 +13,15 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    default: null
   },
-  empCode: {
+  code: {
     type: Number,
     default: null
   },
   workType: {     // HO, HOS, SUH, Field
     type: String,
-    default: 'HO'
+    default: null
   },
   supervisor: {
     type: Number,
@@ -30,9 +31,9 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  distributors: [],
+  /*distributors: [],
   divisions: [],
-  stockiest: [],
+  stockiest: [],*/
   portals: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "gen_portal"
