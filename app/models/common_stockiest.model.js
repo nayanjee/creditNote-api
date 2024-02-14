@@ -14,26 +14,6 @@ const StockiestSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    city: {
-        type: String,
-        default: null
-    },
-    district: {
-        type: String,
-        default: null
-    },
-    state: {
-        type: String,
-        default: null
-    },
-    zipcode: {
-		type: String,
-		default: null
-	},
-    country: {
-        type: String,
-        default: 'india'
-    },
     isActive: {
         type: Boolean,
         default: true
