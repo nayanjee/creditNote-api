@@ -28,4 +28,5 @@ module.exports = function (app) {
 
   app.get("/api/user/:userId", controller.getUserById);
   app.post("/api/user/createuser", controller.createuser);
+  app.get("/api/userSupervisor/:userType", controller.getUserSupervisor);
 };
