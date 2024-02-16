@@ -12,8 +12,8 @@
 **/
 const controller = require("../controllers/common_division.controller");
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
+module.exports = function (app) {
+  app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
@@ -24,4 +24,7 @@ module.exports = function(app) {
 
   app.get("/api/division/all", controller.getAll);
   app.get("/api/division/:divisionId", controller.getDivisionById);
+  app.get("/api/division/getdivision/:divisionId", controller.getDivisionById2);
+  app.post("/api/division/add", controller.add);
+  app.post("/api/division/edit", controller.edit);
 };
