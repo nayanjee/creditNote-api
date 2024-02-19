@@ -26,6 +26,7 @@ module.exports = function (app) {
     controller.adminBoard
   ); */
 
+  app.get("/api/user/all", controller.getallusers);
   app.get("/api/user/:userId", controller.getUserById);
   app.post("/api/user/createuser", controller.createuser);
   app.get("/api/userSupervisor/:userType", controller.getUserSupervisor);
