@@ -48,15 +48,41 @@ exports.getDivisionById2 = function (req, res) {
 
 exports.edit = function (req, res) {
 	console.log(req.body);
-	// const reqData = {
-	// 	supplyProof: req.body.supplyProof
-	// }
+	const newdivision = req.body.newdivision;
+	const olddivision = req.body.olddivision;
+	if (newdivision != olddivision) {
+		Division.findOne({ division: newdivision }, (error, result) => {
+			if (error) return res.status(200).send({ status: 400, message: 'problemFindingRecord' });
+			if (result) return res.status(200).send({ status: 400, message: 'Division ID already exist, please enter valid number.' });
 
-	Division.findByIdAndUpdate(req.body._id, req.body).exec((err, success) => {
-		if (err) {
-			return res.status(200).send({ status: 400, message: "somethingWrong" });
-		} else {
-			res.status(200).send({ status: 200, message: "success", data: [] });
+			const reqData = {
+				plant: req.body.plant,
+				name: req.body.name,
+				division: req.body.newdivision,
+				updatedBy: mongoose.Types.ObjectId(req.body.loggedUserId)
+			}
+			Division.findByIdAndUpdate(req.body._id, reqData).exec((err, success) => {
+				if (err) {
+					return res.status(200).send({ status: 400, message: "somethingWrong" });
+				} else {
+					res.status(200).send({ status: 200, message: "success", data: [] });
+				}
+			});
+
+		});
+	} else {
+		const reqData = {
+			plant: req.body.plant,
+			name: req.body.name,
+			updatedBy: mongoose.Types.ObjectId(req.body.loggedUserId)
 		}
-	});
+		Division.findByIdAndUpdate(req.body._id, reqData).exec((err, success) => {
+			if (err) {
+				return res.status(200).send({ status: 400, message: "somethingWrong" });
+			} else {
+				res.status(200).send({ status: 200, message: "success", data: [] });
+			}
+		});
+	}
+
 }
