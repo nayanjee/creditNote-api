@@ -12,8 +12,8 @@
 **/
 const controller = require("../controllers/common_distributor.controller");
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
+module.exports = function (app) {
+  app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
@@ -26,7 +26,11 @@ module.exports = function(app) {
 
   app.get("/api/distributor/getDistributor9000", controller.getDistributor9000);
   app.get("/api/getCustomer/:plant", controller.getCustomerByPlant);
+  app.get("/api/distributor/:id", controller.getDistributorById);
 
   app.post("/api/distributorImport", controller.importDistributor);
   app.post("/api/distributor/distributorDivison", controller.distributorDivison);
+  app.post("/api/distributor/add", controller.add);
+  app.post("/api/distributor/edit", controller.edit);
+
 };
