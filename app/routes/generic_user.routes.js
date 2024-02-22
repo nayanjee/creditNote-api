@@ -26,6 +26,7 @@ module.exports = function (app) {
     controller.adminBoard
   ); */
 
+  app.get("/api/user/all", controller.getallusers);
   app.get("/api/user/:userId", controller.getUserById);
   app.get("/api/userSupervisor/:userType", controller.getUserSupervisor);
   app.get("/api/user/getDistStockistDivision/:userId", controller.getDistStockistDivision);

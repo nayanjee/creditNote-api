@@ -12,8 +12,8 @@
 **/
 const controller = require("../controllers/common_stockiest.controller");
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
+module.exports = function (app) {
+  app.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
@@ -23,8 +23,13 @@ module.exports = function(app) {
 
 
   app.get("/api/stockiest/all", controller.getAll);
+  app.get("/api/stockiest/getdistinctplan", controller.getdistinctplan);
   //app.get("/api/stockiest/:stockiests", controller.getStockiests);
   app.post("/api/stockiest/distributorStockiest", controller.distributorStockiest);
   app.post("/api/getStockiest", controller.stockiestByIds);
   app.post("/api/stockiestImport", controller.importStockiest);
+  app.post("/api/stockiest/add", controller.add);
+  app.get("/api/stockiest/:id", controller.getStockiestById);
+  app.post("/api/stockiest/edit", controller.edit);
+
 };

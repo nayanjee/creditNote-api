@@ -20,7 +20,7 @@ exports.add = (req, res) => {
 	});
 };
 exports.getAll = function (req, res) {
-	Division.find({ isActive: true, isDeleted: false }, (error, result) => {
+	Division.find({ isDeleted: false }, (error, result) => {
 		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
 		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
 
@@ -59,6 +59,7 @@ exports.edit = function (req, res) {
 				plant: req.body.plant,
 				name: req.body.name,
 				division: req.body.newdivision,
+				isActive: req.body.status,
 				updatedBy: mongoose.Types.ObjectId(req.body.loggedUserId)
 			}
 			Division.findByIdAndUpdate(req.body._id, reqData).exec((err, success) => {
@@ -74,6 +75,7 @@ exports.edit = function (req, res) {
 		const reqData = {
 			plant: req.body.plant,
 			name: req.body.name,
+			isActive: req.body.status,
 			updatedBy: mongoose.Types.ObjectId(req.body.loggedUserId)
 		}
 		Division.findByIdAndUpdate(req.body._id, reqData).exec((err, success) => {
