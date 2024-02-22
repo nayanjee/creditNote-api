@@ -61,15 +61,16 @@ exports.getClaimById = function (req, res) {
 exports.create = function (req, res) {
 	if (req.body.header) {
 		const explodeHeader = req.body.header.split('.::.');
-		if (explodeHeader.length === 5) {
+		if (explodeHeader.length === 6) {
 			const totRecords = req.body.claims.length + 1;
 
 			// Seperate all the value from header and specify it
-			const customerId = explodeHeader[0];
-			const claimType = explodeHeader[1];
-			const claimMonth = explodeHeader[2];
-			const claimYear = explodeHeader[3];
-			const userId = explodeHeader[4];
+			const plant = explodeHeader[0];
+			const customerId = explodeHeader[1];
+			const claimType = explodeHeader[2];
+			const claimMonth = explodeHeader[3];
+			const claimYear = explodeHeader[4];
+			const userId = explodeHeader[5];
 
 			for (var i = 0; i < totRecords; i++) {
 				let enterData = [];
@@ -77,6 +78,7 @@ exports.create = function (req, res) {
 				if (i === 0) { 	// Default fields
 					// Keep all data as per database
 					const fd = {
+						plant: plant,
 						customerId: customerId,
 						claimType: claimType,
 						claimMonth: claimMonth,
@@ -107,6 +109,7 @@ exports.create = function (req, res) {
 				} else { // Add more fields
 					// Keep all data as per database
 					const fd = {
+						plant: plant,
 						customerId: customerId,
 						claimType: claimType,
 						claimMonth: claimMonth,
@@ -137,6 +140,7 @@ exports.create = function (req, res) {
 				}
 
 				if (enterData.length) {
+					console.log('enterData--', enterData);
 					Claim.create(enterData, (err, rec) => {
 						if (err === null && rec.length === 1 && explodeImage.length) {
 							let images = [];
@@ -167,15 +171,16 @@ exports.create = function (req, res) {
 exports.update = function (req, res) {
 	if (req.body.header) {
 		const explodeHeader = req.body.header.split('.::.');
-		if (explodeHeader.length === 5) {
+		if (explodeHeader.length === 6) {
 			const totRecords = req.body.claims.length + 1;
 
 			// Seperate all the value from header and specify it
-			const customerId = explodeHeader[0];
-			const claimType = explodeHeader[1];
-			const claimMonth = explodeHeader[2];
-			const claimYear = explodeHeader[3];
-			const userId = explodeHeader[4];
+			const plant = explodeHeader[0];
+			const customerId = explodeHeader[1];
+			const claimType = explodeHeader[2];
+			const claimMonth = explodeHeader[3];
+			const claimYear = explodeHeader[4];
+			const userId = explodeHeader[5];
 
 			for (var i = 0; i < totRecords; i++) {
 				let enterData = [];
@@ -183,6 +188,7 @@ exports.update = function (req, res) {
 				if (i === 0) { 	// Default fields
 					// Keep all data as per database
 					const fd = {
+						plant: plant,
 						customerId: customerId,
 						claimType: claimType,
 						claimMonth: claimMonth,
@@ -213,6 +219,7 @@ exports.update = function (req, res) {
 				} else { // Add more fields
 					// Keep all data as per database
 					const fd = {
+						plant: plant,
 						customerId: customerId,
 						claimType: claimType,
 						claimMonth: claimMonth,
@@ -271,11 +278,6 @@ exports.update = function (req, res) {
 }
 
 exports.updateClaim = function (req, res) {
-	console.log(req.body);
-	// const reqData = {
-	// 	supplyProof: req.body.supplyProof
-	// }
-
 	Claim.findByIdAndUpdate(req.body._id, req.body).exec((err, success) => {
 		if (err) {
 			return res.status(400).send({ status: 400, message: "somethingWrong" });
@@ -327,7 +329,7 @@ exports.submitClaim = (req, res) => {
 	}
 }
 
-exports.claimForApproval = (req, res) => {
+/* exports.claimForApproval = (req, res) => {
 	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
 
 	let condition = { isDraft: false, isSubmit: true };
@@ -336,6 +338,44 @@ exports.claimForApproval = (req, res) => {
 	if (req.body.year) condition.claimYear = parseInt(req.body.year);
 	if (req.body.division) condition.divisionName = req.body.division;
 	if (req.body.type) condition.claimType = req.body.type;
+	console.log(condition)
+
+	Claim.aggregate([
+		{
+			$match: condition
+		}, {
+			$lookup: {
+				from: "cn_claim_files",
+				localField: "_id",
+				foreignField: "claimId",
+				as: "files"
+			}
+		}, {
+			$lookup: {
+				from: "com_batches",
+				localField: "batch",
+				foreignField: "batch",
+				as: "batchDetail"
+			}
+		}
+	]).exec((error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	});
+} */
+
+exports.claimForApproval = (req, res) => {
+	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
+
+	let condition = { isDraft: false, isSubmit: true };
+	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
+	if (req.body.year) condition.claimYear = parseInt(req.body.year);
+	if (req.body.divisions) condition.divisionId = { $in :req.body.divisions};
+	//if (req.body.type) condition.claimType = req.body.type;
+	console.log(condition)
 
 	Claim.aggregate([
 		{
