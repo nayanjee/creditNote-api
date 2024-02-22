@@ -122,7 +122,7 @@ exports.add = function (req, res) {
   const plant = Number(req.body.plant);
   Distributor.findOne({ company: req.body.company, customerId: req.body.customerId, plant: req.body.plant, isDeleted: false }, (error, result) => {
     if (error) return res.status(200).send({ status: 400, message: 'problemFindingRecord' });
-    if (result) return res.status(200).send({ status: 400, message: 'Record already exist for given Company, Customer ID & Plant' });
+    if (result) return res.status(200).send({ status: 400, message: 'Record already exist for given Organization, Customer ID & Plant' });
     const reqData = {
       plant: plant,
       customerId: customerId,
@@ -163,7 +163,7 @@ exports.edit = function (req, res) {
       // console.log('customer error', errcus);
       // console.log('customer result', rescus);
       if (errcus) return res.status(200).send({ status: 400, message: 'problemFindingRecord' });
-      if (rescus) return res.status(200).send({ status: 400, message: 'Record already exist for given Company, Customer ID & Plant.' });
+      if (rescus) return res.status(200).send({ status: 400, message: 'Record already exist for given Organization, Customer ID & Plant.' });
       Distributor.findByIdAndUpdate(req.body._id, reqData).exec((errsuc, success) => {
         if (errsuc) {
           return res.status(200).send({ status: 400, message: "somethingWrong" });
@@ -175,7 +175,7 @@ exports.edit = function (req, res) {
     });
   }
   else {
-    console.log('else====>', req.body);
+    //console.log('else====>', req.body);
     Distributor.findByIdAndUpdate(req.body._id, reqData).exec((errsuc, success) => {
       if (errsuc) {
         return res.status(200).send({ status: 400, message: "somethingWrong" });
