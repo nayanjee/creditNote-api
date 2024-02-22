@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ClaimSchema = new mongoose.Schema({
+  plant: {
+    type: Number,
+    default: null
+  },
   customerId: {
     type: Number,
     default: null

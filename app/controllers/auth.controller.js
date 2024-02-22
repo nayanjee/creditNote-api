@@ -100,7 +100,8 @@ exports.signin = (req, res) => {
       const data = {
         id: user._id,
         name: user.name,
-        type: user.type,
+        code: user.code,
+        type: user.userType,
         email: user.email,
         image: user.image,
         portal: portalId,

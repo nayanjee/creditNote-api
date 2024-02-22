@@ -52,6 +52,26 @@ exports.getUserSupervisor = (req, res) => {
   }
 }
 
+exports.getDistStockistDivision = (req, res) => {
+  const reqData = { userId: req.params.userId }
+  EmpDistStockistDivision.find(reqData, (error, result) => {
+      if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+      if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+      res.status(200).send({ status: 200, message: 'Success', data: result });
+    });
+}
+
+exports.getStockistDistDivision = (req, res) => {
+  const reqData = { userId: req.params.userId }
+  StockistDivision.find(reqData, (error, result) => {
+      if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+      if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+      res.status(200).send({ status: 200, message: 'Success', data: result });
+    });
+}
+
 exports.createuser = (req, res) => {
   User.find({ email: req.body.email }, (error, result) => {
     if (error) return res.status(200).send({ status: 400, message: 'Problem finding record' });
@@ -105,8 +125,8 @@ exports.createuser = (req, res) => {
             } else if (req.body.userType === 'stockist') {
               StockistDivision.create({
                 userId: suc._id,
-                plant: req.body.code,
-                customerId: req.body.plant,
+                plant: req.body.plant,
+                customerId: req.body.code,
                 divisions: req.body.divisions,
                 createdBy: mongoose.Types.ObjectId(req.body.loggedUserId)
               }, (derr, dsuc) => {

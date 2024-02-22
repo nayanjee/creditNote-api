@@ -25,6 +25,8 @@ module.exports = function (app) {
   app.get("/api/division/all", controller.getAll);
   app.get("/api/division/:divisionId", controller.getDivisionById);
   app.get("/api/division/getdivision/:divisionId", controller.getDivisionById2);
+
   app.post("/api/division/add", controller.add);
   app.post("/api/division/edit", controller.edit);
+  app.post("/api/getDivision", controller.divisionByIds);
 };

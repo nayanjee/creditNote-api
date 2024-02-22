@@ -23,7 +23,6 @@ module.exports = function (app) {
 
 
   app.get("/api/distributor/all", controller.getAll);
-
   app.get("/api/distributor/getDistributor9000", controller.getDistributor9000);
   app.get("/api/getCustomer/:plant", controller.getCustomerByPlant);
   app.get("/api/distributor/:id", controller.getDistributorById);
