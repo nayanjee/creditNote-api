@@ -139,6 +139,7 @@ exports.create = function (req, res) {
 				}
 
 				if (enterData.length) {
+					console.log('enterData--', enterData);
 					Claim.create(enterData, (err, rec) => {
 						if (err === null && rec.length === 1 && explodeImage.length) {
 							let images = [];
@@ -365,16 +366,15 @@ exports.submitClaim = (req, res) => {
 
 exports.claimForApproval = (req, res) => {
 	if (!req.body.plant) return res.status(200).send({ status: 400, param: 'plant', message: 'Distributor is required.' });
-
+  if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
+  
 	let condition = { isDraft: false, isSubmit: true };
 			condition.plant = parseInt(req.body.plant);
-			condition.customerId = parseInt(req.body.customerId);
+	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+
 	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
 	if (req.body.year) condition.claimYear = parseInt(req.body.year);
 	if (req.body.divisions) condition.divisionId = { $in :req.body.divisions};
-	//if (req.body.type) condition.claimType = req.body.type;
-
-	console.log('claimForApproval-----', condition);
 
 	Claim.aggregate([
 		{
