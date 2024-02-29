@@ -8,7 +8,7 @@ const ClaimSchema = new mongoose.Schema({
   },
   customerId: {
     type: Number,
-    default: null
+    default: 0
   },
   claimType: {
     type: String,
@@ -106,12 +106,19 @@ const ClaimSchema = new mongoose.Schema({
     type: Number,
     default: null
   },
+  approvedQty: {
+    type: Number,
+    default: 0
+  },
+  approvedAmount: {
+    type: Number,
+    default: 0
+  },
 
   isDraft: {
     type: Boolean,
     default: true
   },
-
   isSubmit: {
     type: Boolean,
     default: false
@@ -126,6 +133,95 @@ const ClaimSchema = new mongoose.Schema({
     default: null
   },
 
+  // inprogress => 0, approved => 1, unapproved => 2,
+  ftStatus: {
+    type: Number,
+    default: 0
+  },
+  ftActionOn: {
+    type: Date,
+    default: null
+  },
+  ftActionBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "gen_user",
+    default: null
+  },
+  ftUpdateComment: {
+    type: String,
+    default: null
+  },
+  ftApprovalComment: {
+    type: String,
+    default: null
+  },
+  
+  suhStatus: {
+    type: Number,
+    default: 0
+  },
+  suhActionOn: {
+    type: Date,
+    default: null
+  },
+  suhActionBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "gen_user",
+    default: null
+  },
+  suhUpdateComment: {
+    type: String,
+    default: null
+  },
+  suhApprovalComment: {
+    type: String,
+    default: null
+  },
+
+  hoStatus: {
+    type: Number,
+    default: 0
+  },
+  hoActionOn: {
+    type: Date,
+    default: null
+  },
+  hoActionBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "gen_user",
+    default: null
+  },
+  hoUpdateComment: {
+    type: String,
+    default: null
+  },
+  hoApprovalComment: {
+    type: String,
+    default: null
+  },
+
+  ho1Status: {
+    type: Number,
+    default: 0
+  },
+  ho1ActionOn: {
+    type: Date,
+    default: null
+  },
+  ho1ActionBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "gen_user",
+    default: null
+  },
+  ho1UpdateComment: {
+    type: String,
+    default: null
+  },
+  ho1ApprovalComment: {
+    type: String,
+    default: null
+  },
+
   isDeleted: {
     type: Boolean,
     default: false
@@ -137,81 +233,6 @@ const ClaimSchema = new mongoose.Schema({
   deletedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "gen_user",
-    default: null
-  },
-
-  isFoApproved: {
-    type: Boolean,
-    default: false
-  },
-  foApprovedOn: {
-    type: Date,
-    default: null
-  },
-  foApprovedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "gen_user",
-    default: null
-  },
-
-  isFoUnapproved: {
-    type: Boolean,
-    default: false
-  },
-  foUnapprovedOn: {
-    type: Date,
-    default: null
-  },
-  foUnapprovedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "gen_user",
-    default: null
-  },
-  foUnapprovedComment: {
-    type: String,
-    default: null
-  },
-
-  isApproved: {
-    type: Boolean,
-    default: false
-  },
-  approvedOn: {
-    type: Date,
-    default: null
-  },
-  approvedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "gen_user",
-    default: null
-  },
-
-  isUnapproved: {
-    type: Boolean,
-    default: false
-  },
-  unapprovedOn: {
-    type: Date,
-    default: null
-  },
-  unapprovedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "gen_user",
-    default: null
-  },
-
-  canceledOn: {
-    type: Date,
-    default: null
-  },
-  canceledBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "gen_user",
-    default: null
-  },
-
-  updateComment: {
-    type: String,
     default: null
   },
 

@@ -102,10 +102,11 @@ exports.signin = (req, res) => {
         name: user.name,
         code: user.code,
         type: user.userType,
+        workType: user.workType,
         email: user.email,
         image: user.image,
-        portal: portalId,
-        stockiest: user.stockiest,
+        //portal: portalId,
+        //stockiest: user.stockiest,
         permissions: permissions
       }
 

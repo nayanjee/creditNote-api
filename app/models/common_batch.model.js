@@ -44,6 +44,54 @@ const BatchSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    mrp2: {
+        type: Number,
+        default: 0
+    },
+    ptd2: {
+        type: Number,
+        default: 0
+    },
+    ptr2: {
+        type: Number,
+        default: 0
+    },
+    pts2: {
+        type: Number,
+        default: 0
+    },
+    mrp3: {
+        type: Number,
+        default: 0
+    },
+    ptd3: {
+        type: Number,
+        default: 0
+    },
+    ptr3: {
+        type: Number,
+        default: 0
+    },
+    pts3: {
+        type: Number,
+        default: 0
+    },
+    mrp4: {
+        type: Number,
+        default: 0
+    },
+    ptd4: {
+        type: Number,
+        default: 0
+    },
+    ptr4: {
+        type: Number,
+        default: 0
+    },
+    pts4: {
+        type: Number,
+        default: 0
+    },
     isActive: {
         type: Boolean,
         default: true
