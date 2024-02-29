@@ -184,12 +184,7 @@ exports.edit = function (req, res) {
       }
     });
   }
-
-
 };
-
-
-
 
 exports.getDistributorById = function (req, res) {
   Distributor.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }, (error, result) => {

@@ -16,7 +16,6 @@ exports.getClaim = function (req, res) {
 	if (req.body.division) condition.divisionName = req.body.division;
 	if (req.body.type) condition.claimType = req.body.type;
 
-	console.log('condition-----', condition);
 	Claim.aggregate([
 		{
 			$match: condition
@@ -140,7 +139,6 @@ exports.create = function (req, res) {
 				}
 
 				if (enterData.length) {
-					console.log('enterData--', enterData);
 					Claim.create(enterData, (err, rec) => {
 						if (err === null && rec.length === 1 && explodeImage.length) {
 							let images = [];
@@ -309,7 +307,6 @@ exports.deleteFile = (req, res) => {
 
 exports.fileUpload = (req, res) => {
 	ClaimFile.insertMany(req.body, (fileErr, fileRec) => {
-		// console.log('Inserted');
 		res.status(200).send({ status: 200, message: "success", data: [] });
 	});
 };
@@ -367,15 +364,17 @@ exports.submitClaim = (req, res) => {
 } */
 
 exports.claimForApproval = (req, res) => {
-	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
+	if (!req.body.plant) return res.status(200).send({ status: 400, param: 'plant', message: 'Distributor is required.' });
 
 	let condition = { isDraft: false, isSubmit: true };
-	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+			condition.plant = parseInt(req.body.plant);
+			condition.customerId = parseInt(req.body.customerId);
 	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
 	if (req.body.year) condition.claimYear = parseInt(req.body.year);
 	if (req.body.divisions) condition.divisionId = { $in :req.body.divisions};
 	//if (req.body.type) condition.claimType = req.body.type;
-	console.log(condition)
+
+	console.log('claimForApproval-----', condition);
 
 	Claim.aggregate([
 		{
@@ -434,8 +433,9 @@ exports.getClaimForApproval = (req, res) => {
 
 exports.getApprovedClaim = (req, res) => {
 	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
-	console.log(req.body);
+	
 	let condition = { isDraft: false, isSubmit: true };
+	if (req.body.plant) condition.plant = parseInt(req.body.plant);
 	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
 	if (req.body.claimType) condition.claimType = req.body.claimType;
 	if (req.body.divisionName) condition.divisionName = req.body.divisionName;
@@ -446,7 +446,6 @@ exports.getApprovedClaim = (req, res) => {
 		else if (req.body.status === 'unapproved') condition.isUnapproved = true;
 	}
 
-	console.log('condition---', condition);
 	Claim.aggregate([
 		{
 			$match: condition
