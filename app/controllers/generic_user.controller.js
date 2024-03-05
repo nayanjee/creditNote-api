@@ -18,7 +18,7 @@ exports.getUserById = (req, res) => {
 
 exports.getUserSupervisor = (req, res) => {
   if (req.params.userType === 'ho') {
-    const reqData = { $or: [{ userType: "head" }, { userType: "ho" }], isSupervisor: true, isActive: true, isDeleted: false };
+    const reqData = { $or: [{ userType: "ho" }], isSupervisor: true, isActive: true, isDeleted: false };
     User.find(reqData, (error, result) => {
       if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
       if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
