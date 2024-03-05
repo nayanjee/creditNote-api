@@ -85,22 +85,47 @@ let convertExcelToJson  = (fileName) => {
 
     if (tempData.length <= 100100) {
     	console.log(tempData.length);
+    	const newArray = [];
     	let countExecuted = 0;
     	tempData.forEach(async(element, index) => {
-    		countExecuted = countExecuted+1;
+    		const expireOn = element['Product Expiry Date'] ? moment(new Date(element['Product Expiry Date'])).add(1,'days').format("YYYY-MM-DD") : '';
+
+    		const newData =  {
+    			material: element.Material,
+    			materialName: element['Material Description'],
+					plant: element.Plant,
+					division: element.Division,
+					divName: element['Div Name'],
+			    batch: element['Batch No'],
+			    expireOn: expireOn,
+			    mrp: element['MRP Value'],
+			    ptd: element['PTS Amount'],
+			    ptr: element['PTD Amount'],
+			    pts: element['PTR Amount']
+    		}
+
+    		newArray.push(newData);
+
+
+    		/*countExecuted = countExecuted+1;
     		//console.log(element);
     		if (element.Material) {
     			const batchUpsert = await upsertBatch(element);
     			console.log('batchUpsert---', batchUpsert);
 
-    			//const productUpdate = await updateProduct(element);
-    			//console.log('productUpdate---', productUpdate);
+    			// const productUpdate = await updateProduct(element);
+    			// console.log('productUpdate---', productUpdate);
 
     			if (tempData.length === countExecuted) {
     				resolve({status:200, message: "Success"});
     			}
-    		}
+    		}*/
     	});
+
+    	(async function(){
+        const insertMany = await Batch.insertMany(newArray);
+        resolve({status:200, message: "Success"});
+      })();
     } else {
       return res.status(200).send({status:400, message: "This file has more than 1 lakh rows, please upload it by reducing it."});
     }

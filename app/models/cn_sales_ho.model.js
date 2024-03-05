@@ -7,14 +7,19 @@ const SalesHoSchema = new mongoose.Schema({
         default: 0
     },
     billDocNumber: {
-        type: Number,
-        default: 0
+        type: String,
+        default: null
+        // cast: false
     },
     billDocDate: {
         type: Date,
         default: null
     },
     billDocType: {
+        type: String,
+        default: null
+    },
+    itemCategory: {
         type: String,
         default: null
     },
@@ -50,75 +55,11 @@ const SalesHoSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    netValue: {
+    mrpAmount: {
         type: Number,
         default: 0
     },
-    itemCategory: {
-        type: String,
-        default: null
-    },
-    salesOrg: {
-        type: Number,
-        default: 0
-    },
-    distChannel: {
-        type: Number,
-        default: 0
-    },
-    salesRegion: {
-        type: String,
-        default: null
-    },
-    storageLocation: {
-        type: String,
-        default: null
-    },
-    paymentTermDesc: {
-        type: String,
-        default: null
-    },
-    gstNo: {
-        type: String,
-        default: null
-    },
-    billPartyCity: {
-        type: String,
-        default: null
-    },
-    salesUom: {
-        type: String,
-        default: null
-    },
-    mrp: {
-        type: Number,
-        default: 0
-    },
-    ptd: {
-        type: Number,
-        default: 0
-    },
-    pts: {
-        type: Number,
-        default: 0
-    },
-    ptr: {
-        type: Number,
-        default: 0
-    },
-    billValue: {
-        type: Number,
-        default: 0
-    },
-    totalValue: {
-		type: Number,
-        default: 0
-	},
-    roundOfValue: {
-        type: Number,
-        default: 0
-    },
-    discount: {
+    ptdAmount: {
         type: Number,
         default: 0
     },
@@ -126,21 +67,9 @@ const SalesHoSchema = new mongoose.Schema({
         type: Date,
         default: null
     },
-    month: {
-        type: Number,
-        default: null
-    },
-    year: {
-        type: Number,
-        default: null
-    },
-    monthYear: {
-        type: Date,
-        default: null
-    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Admin",
+        ref: "gen_user",
         default: null
     }
 }, {

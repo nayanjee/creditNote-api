@@ -7,6 +7,10 @@ const BatchSchema = new mongoose.Schema({
         ref: "com_product",
         default: null
     },
+    materialName: {
+        type: String,
+        default: null
+    },
     plant: {
         type: Number,
         default: null
@@ -15,13 +19,13 @@ const BatchSchema = new mongoose.Schema({
         type: Number,
         ref: "com_division",
         default: 0
-    }, 
-    batch: {
+    },
+    divName: {
         type: String,
         default: null
     },
-    manufacturedOn: {
-        type: Date,
+    batch: {
+        type: String,
         default: null
     },
     expireOn: {
