@@ -10,14 +10,6 @@ const SalesRemainingSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    itemCategory: {
-        type: String,
-        default: null
-    },
-    division: {
-        type: Number,
-        default: 0
-    },
     batch: {
         type: String,
         default: null
@@ -25,11 +17,6 @@ const SalesRemainingSchema = new mongoose.Schema({
     quantity: {
         type: Number,
         default: 0
-    },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        default: null
     }
 }, {
     timestamps: true

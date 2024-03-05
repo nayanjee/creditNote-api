@@ -22,11 +22,12 @@ module.exports = function(app) {
   });
 
   app.post("/api/sales/ho/invoice", controller.hoInvoice);
+  app.post("/api/sales/hoSalesImport", controller.importHoSales);
   app.post("/api/sales/distSalesImport", controller.importDistSales);
   app.post("/api/sales/remainingQuantity", controller.remainingQuantity);
-  app.post("/api/remaining/findUpdateRemaining", controller.findUpdateRemaining);
-  app.post("/api/remaining/updateRemainingLog", controller.updateRemainingLog);
-
   app.post("/api/sales/allocateQuantity", controller.allocateQuantity);
   app.post("/api/sales/allocatedQuantity", controller.allocatedQuantity);
+  
+  app.post("/api/remaining/findUpdateRemaining", controller.findUpdateRemaining);
+  app.post("/api/remaining/updateRemainingLog", controller.updateRemainingLog);
 };

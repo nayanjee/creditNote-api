@@ -7,14 +7,6 @@ const SalesAllocatedQuantitySchema = new mongoose.Schema({
         ref: "cn_claim",
         default: null
     },
-    distInvoiceNo: {
-        type: Number,
-        default: 0
-    },
-    distInvoiceQty: {
-        type: Number,
-        default: 0
-    },
     stkInvoiceNo: {
         type: Number,
         default: 0
@@ -26,11 +18,6 @@ const SalesAllocatedQuantitySchema = new mongoose.Schema({
     allocatedQty: {
         type: Number,
         default: 0
-    },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        default: null
     }
 }, {
     timestamps: true

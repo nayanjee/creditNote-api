@@ -139,7 +139,6 @@ exports.create = function (req, res) {
 				}
 
 				if (enterData.length) {
-					console.log('enterData--', enterData);
 					Claim.create(enterData, (err, rec) => {
 						if (err === null && rec.length === 1 && explodeImage.length) {
 							let images = [];
@@ -432,18 +431,37 @@ exports.getClaimForApproval = (req, res) => {
 }
 
 exports.getApprovedClaim = (req, res) => {
+	if (!req.body.plant) return res.status(200).send({ status: 400, param: 'plant', message: 'Distributor is required.' });
 	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
 	
-	let condition = { isDraft: false, isSubmit: true };
-	if (req.body.plant) condition.plant = parseInt(req.body.plant);
-	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+	let condition = { 
+		isDraft: false, 
+		isSubmit: true,
+		plant: parseInt(req.body.plant),
+		customerId: parseInt(req.body.customerId)
+	};
 	if (req.body.claimType) condition.claimType = req.body.claimType;
-	if (req.body.divisionName) condition.divisionName = req.body.divisionName;
+	if (req.body.division) condition.divisionId = parseInt(req.body.division);
 	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
 	if (req.body.year) condition.claimYear = parseInt(req.body.year);
 	if (req.body.status) {
-		if (req.body.status === 'approved') condition.isApproved = true;
-		else if (req.body.status === 'unapproved') condition.isUnapproved = true;
+		if (req.body.status === 'approved') {
+			condition.ho1Status = 1;
+		} else if (req.body.status === 'rejected') {
+			condition.$or = [{ftStatus: 2}, {suhStatus: 2}, {hoStatus: 2}, {ho1Status: 2}];
+		} else if (req.body.status === 'inprogress') {
+			condition.$and = [{ftStatus: {$ne: 2}}, {suhStatus: {$ne: 2}}, {hoStatus: {$ne: 2}}, {ho1Status: 0}] 
+		}
+
+		/* if (req.body.status === 'inprogress') condition.ftStatus = 0;
+		else if (req.body.status === 'acceptedFt') condition.ftStatus = 1;
+		else if (req.body.status === 'acceptedSuh') condition.suhStatus = 1;
+		else if (req.body.status === 'acceptedHo') condition.hoStatus = 1;
+		else if (req.body.status === 'approved') condition.ho1Status = 1;
+		else if (req.body.status === 'rejectedFt') condition.ftStatus = 2;
+		else if (req.body.status === 'rejectedSuh') condition.suhStatus = 2;
+		else if (req.body.status === 'rejectedHo') condition.hoStatus = 2;
+		else if (req.body.status === 'rejected') condition.ho1Status = 2; */
 	}
 
 	Claim.aggregate([
@@ -515,4 +533,21 @@ exports.saveClaimPurchaseOrder = (req, res) => {
 			res.status(200).send({ status: 200, message: "success", data: [] });
 		}
 	});
+}
+
+exports.checkDuplicacy = (req, res) => {
+	const condition = {
+		plant: parseInt(req.body.plant),
+    batch: req.body.batch,
+    invoice: req.body.invoice,
+    material: parseInt(req.body.material),
+    customerId: parseInt(req.body.customerId),
+    ho1Status: 1
+	};
+
+	Claim.findOne(condition, (error, result) => {
+		if (error) return res.status(200).send({ status: 400, message: 'problemFindingRecord' });
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	});
+
 }

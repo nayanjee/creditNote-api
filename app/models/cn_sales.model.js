@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const SalesSchema = new mongoose.Schema({
     billDocNumber: {
-        type: Number,
-        default: 0
+        type: String,
+        default: null
     },
     billDocDate: {
         type: Date,
@@ -18,14 +18,6 @@ const SalesSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    salesOrg: {
-        type: Number,
-        default: 0
-    },
-    distChannel: {
-        type: Number,
-        default: 0
-    },
     division: {
         type: Number,
         default: 0
@@ -34,27 +26,15 @@ const SalesSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    salesRegion: {
-        type: String,
-        default: null
-    },
     plant: {
         type: Number,
         default: 0
-    },
-    gstNo: {
-        type: String,
-        default: null
     },
     billToParty: {
         type: Number,
         default: 0
     },
     billToPartyName: {
-        type: String,
-        default: null
-    },
-    billPartyCity: {
         type: String,
         default: null
     },
@@ -78,10 +58,6 @@ const SalesSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    salesUom: {
-        type: String,
-        default: null
-    },
     mrp: {
         type: Number,
         default: 0
@@ -98,7 +74,7 @@ const SalesSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    billValue: {
+    /*billValue: {
         type: Number,
         default: 0
     },
@@ -117,7 +93,7 @@ const SalesSchema = new mongoose.Schema({
     roundOfValue: {
         type: Number,
         default: 0
-    },
+    },*/
     month: {
         type: Number,
         default: null
