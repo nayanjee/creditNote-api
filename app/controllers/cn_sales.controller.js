@@ -248,10 +248,10 @@ let convertExcelToJson  = (fileName) => {
       // Add the sheet's json to our data array
       parsedData.push(...tempData);
 
-      const year = moment().format('YYYY');
-	    const month = moment().format('MM');
-	    const monthYear = moment().format('YYYY-MM-01');
-	    console.log('monthYear---', year, month, monthYear);
+      // const year = moment().format('YYYY');
+	    // const month = moment().format('MM');
+	    // const monthYear = moment().format('YYYY-MM-01');
+	    // console.log('monthYear---', year, month, monthYear);
 
       // change key name in array of objects
       const newArray = [];
@@ -278,15 +278,15 @@ let convertExcelToJson  = (fileName) => {
 	        	mrp: item['MRP Value'],
 	        	pts: item['PTS Amount'],
 	        	ptr: item['PTR Amount'],
-	        	ptd: item['PTD Amount'],
+	        	ptd: item['PTD Amount']
 	        	/*billValue: item['Bill Value'],
 	        	discount: item['Discount'],
 	        	netValue: item['Net Value'],
 	        	totalValue: item['TOT Value'],
-	        	roundOfValue: item['Rounding Off Value'],*/
+	        	roundOfValue: item['Rounding Off Value'],
 	        	month: parseInt(month),
 	        	year: parseInt(year),
-	        	monthYear: monthYear
+	        	monthYear: monthYear*/
 	        };
 
 	        newArray.push(newData)
