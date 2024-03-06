@@ -93,7 +93,7 @@ const SalesSchema = new mongoose.Schema({
     roundOfValue: {
         type: Number,
         default: 0
-    },*/
+    },
     month: {
         type: Number,
         default: null
@@ -105,7 +105,7 @@ const SalesSchema = new mongoose.Schema({
     monthYear: {
         type: Date,
         default: null
-    },
+    },*/
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "gen_user",
