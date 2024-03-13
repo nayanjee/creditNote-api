@@ -164,3 +164,32 @@ exports.getallusers = (req, res) => {
     res.status(200).send({ status: 200, message: 'Success', data: result });
   }).sort({ name: 1 });
 };
+
+exports.getDivisionCustomerIds = function (req, res) {
+  User.aggregate([
+    {
+      $match: {_id: mongoose.Types.ObjectId(req.params.userId)}
+    }, {
+      $lookup: {
+        from: "com_distributors",
+        localField: "code",
+        foreignField: "plant",
+        as: "distCustomerIds"
+      }
+    }, {
+      $lookup: {
+        from: "cn_distributor_divisions",
+        localField: "code",
+        foreignField: "plant",
+        as: "divisions"
+      }
+    }, {
+      $sort: { code: 1 }
+    }
+  ]).exec((error, result) => {
+    if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+    if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+    res.status(200).send({ status: 200, message: 'Success', data: result });
+  });
+};

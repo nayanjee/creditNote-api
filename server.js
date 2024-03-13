@@ -17,7 +17,7 @@ const dbConfig = require("./app/config/db.config");
 
 
 var corsOptions = {
-   // origin: "http://localhost:4200"
+  //origin: "http://localhost:4200"
   origin: "http://65.1.70.106:7872"
 };
 
@@ -63,7 +63,7 @@ const db = require("./app/models");
 const Portal = db.portal;
 
 db.mongoose
-   // .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  //.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
   .connect("mongodb://laadmin:lar3n0n787@0.0.0.0:27017/dataplex?authSource=admin&retryWrites=false", {
     useNewUrlParser: true,
     useUnifiedTopology: true
