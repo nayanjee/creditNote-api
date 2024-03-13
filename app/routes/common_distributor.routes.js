@@ -27,9 +27,8 @@ module.exports = function (app) {
   app.get("/api/getCustomer/:plant", controller.getCustomerByPlant);
   app.get("/api/distributor/:id", controller.getDistributorById);
 
-  app.post("/api/distributorImport", controller.importDistributor);
-  app.post("/api/distributor/distributorDivison", controller.distributorDivison);
   app.post("/api/distributor/add", controller.add);
   app.post("/api/distributor/edit", controller.edit);
-
+  app.post("/api/distributorImport", controller.importDistributor);
+  app.post("/api/distributor/distributorDivison", controller.distributorDivison);
 };

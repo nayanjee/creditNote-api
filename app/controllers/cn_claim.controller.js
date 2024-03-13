@@ -60,7 +60,7 @@ exports.getClaimById = function (req, res) {
 exports.create = function (req, res) {
 	if (req.body.header) {
 		const explodeHeader = req.body.header.split('.::.');
-		if (explodeHeader.length === 6) {
+		if (explodeHeader.length === 7) {
 			const totRecords = req.body.claims.length + 1;
 
 			// Seperate all the value from header and specify it
@@ -70,6 +70,7 @@ exports.create = function (req, res) {
 			const claimMonth = explodeHeader[3];
 			const claimYear = explodeHeader[4];
 			const userId = explodeHeader[5];
+			const userType = explodeHeader[6];
 
 			for (var i = 0; i < totRecords; i++) {
 				let enterData = [];
@@ -102,6 +103,21 @@ exports.create = function (req, res) {
 						amount: req.body.def_amount,
 						createdBy: mongoose.Types.ObjectId(userId)
 					}
+
+					if (userType === 'ho') {
+						fd['ftStatus'] = 1;
+						fd['ftActionOn'] = new Date().toISOString();
+						fd['ftActionBy'] = mongoose.Types.ObjectId(userId);
+
+						fd['suhStatus'] = 1;
+						fd['suhActionOn'] = new Date().toISOString();
+						fd['suhActionBy'] = mongoose.Types.ObjectId(userId);
+					} else if (userType === 'field') {
+						fd['ftStatus'] = 1;
+						fd['ftActionOn'] = new Date().toISOString();
+						fd['ftActionBy'] = mongoose.Types.ObjectId(userId);
+					}
+
 					enterData.push(fd);
 
 					explodeImage = req.body.def_image.split('.::.');
@@ -133,13 +149,32 @@ exports.create = function (req, res) {
 						amount: req.body.claims[i - 1].amount,
 						createdBy: mongoose.Types.ObjectId(userId)
 					}
+
+					if (userType === 'ho') {
+						fd['ftStatus'] = 1;
+						fd['ftActionOn'] = new Date().toISOString();
+						fd['ftActionBy'] = mongoose.Types.ObjectId(userId);
+
+						fd['suhStatus'] = 1;
+						fd['suhActionOn'] = new Date().toISOString();
+						fd['suhActionBy'] = mongoose.Types.ObjectId(userId);
+					} else if (userType === 'field') {
+						fd['ftStatus'] = 1;
+						fd['ftActionOn'] = new Date().toISOString();
+						fd['ftActionBy'] = mongoose.Types.ObjectId(userId);
+					}
+
 					enterData.push(fd);
 
 					explodeImage = req.body.claims[i - 1].image.split('.::.');
 				}
 
+				console.log('enterData---', enterData);
+				console.log('explodeImage---', explodeImage);
 				if (enterData.length) {
 					Claim.create(enterData, (err, rec) => {
+						console.log('err---', err);
+						console.log('rec---', rec);
 						if (err === null && rec.length === 1 && explodeImage.length) {
 							let images = [];
 							for (var j = 0; j < explodeImage.length - 1; j++) {
@@ -538,16 +573,14 @@ exports.saveClaimPurchaseOrder = (req, res) => {
 exports.checkDuplicacy = (req, res) => {
 	const condition = {
 		plant: parseInt(req.body.plant),
-    batch: req.body.batch,
-    invoice: req.body.invoice,
-    material: parseInt(req.body.material),
-    customerId: parseInt(req.body.customerId),
-    ho1Status: 1
+	    batch: req.body.batch,
+	    invoice: req.body.invoice,
+	    material: parseInt(req.body.material),
+	    customerId: parseInt(req.body.customerId)
 	};
 
 	Claim.findOne(condition, (error, result) => {
 		if (error) return res.status(200).send({ status: 400, message: 'problemFindingRecord' });
 		res.status(200).send({ status: 200, message: 'Success', data: result });
 	});
-
 }
