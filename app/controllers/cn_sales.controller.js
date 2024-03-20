@@ -129,7 +129,7 @@ exports.remainingQuantity = (req, res) => {
 
 exports.hoInvoice = (req, res) => {
 	const today = moment().format("YYYY-MM-DDT00:00:00.000[Z]");
-	const backDate = moment(today).subtract(12, 'months').format("YYYY-MM-DDT00:00:00.000[Z]");
+	const backDate = moment(today).subtract(24, 'months').format("YYYY-MM-DDT00:00:00.000[Z]");
 
 	const condition = {
 		batch: req.body.batch,
