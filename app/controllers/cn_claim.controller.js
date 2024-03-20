@@ -169,12 +169,8 @@ exports.create = function (req, res) {
 					explodeImage = req.body.claims[i - 1].image.split('.::.');
 				}
 
-				console.log('enterData---', enterData);
-				console.log('explodeImage---', explodeImage);
 				if (enterData.length) {
 					Claim.create(enterData, (err, rec) => {
-						console.log('err---', err);
-						console.log('rec---', rec);
 						if (err === null && rec.length === 1 && explodeImage.length) {
 							let images = [];
 							for (var j = 0; j < explodeImage.length - 1; j++) {
@@ -472,9 +468,10 @@ exports.getApprovedClaim = (req, res) => {
 	let condition = { 
 		isDraft: false, 
 		isSubmit: true,
-		plant: parseInt(req.body.plant),
-		customerId: parseInt(req.body.customerId)
+		plant: parseInt(req.body.plant)
 	};
+
+	if (req.body.customerId !== 'all') condition.customerId = parseInt(req.body.customerId);
 	if (req.body.claimType) condition.claimType = req.body.claimType;
 	if (req.body.division) condition.divisionId = parseInt(req.body.division);
 	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
