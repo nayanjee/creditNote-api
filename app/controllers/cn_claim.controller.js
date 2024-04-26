@@ -10,11 +10,17 @@ exports.getClaim = function (req, res) {
 	if (!req.body.customerId) return res.status(200).send({ status: 400, param: 'customerId', message: 'Stockiest is required.' });
 
 	let condition = { isDraft: true };
-	if (req.body.customerId) condition.customerId = parseInt(req.body.customerId);
+	if (req.body.plant) condition.plant = parseInt(req.body.plant);
 	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
 	if (req.body.year) condition.claimYear = parseInt(req.body.year);
 	if (req.body.division) condition.divisionName = req.body.division;
 	if (req.body.type) condition.claimType = req.body.type;
+	if (req.body.customerId === 'self') {
+		condition.customerId = 0;
+	} else {
+		condition.customerId = parseInt(req.body.customerId);
+	}
+	console.log('condition--', condition);
 
 	Claim.aggregate([
 		{
@@ -65,12 +71,14 @@ exports.create = function (req, res) {
 
 			// Seperate all the value from header and specify it
 			const plant = explodeHeader[0];
-			const customerId = explodeHeader[1];
 			const claimType = explodeHeader[2];
 			const claimMonth = explodeHeader[3];
 			const claimYear = explodeHeader[4];
 			const userId = explodeHeader[5];
 			const userType = explodeHeader[6];
+
+			//let customerId = 0;
+			const customerId =  (userType === 'distributor') ? 0 : explodeHeader[1];
 
 			for (var i = 0; i < totRecords; i++) {
 				let enterData = [];
@@ -470,8 +478,14 @@ exports.getApprovedClaim = (req, res) => {
 		isSubmit: true,
 		plant: parseInt(req.body.plant)
 	};
+	console.log('req.body.customerId--', req.body.customerId);
 
-	if (req.body.customerId !== 'all') condition.customerId = parseInt(req.body.customerId);
+	if (req.body.customerId === 'self') {
+		condition.customerId = 0;
+	} else if (req.body.customerId !== 'all') {
+		condition.customerId = parseInt(req.body.customerId);
+	}
+
 	if (req.body.claimType) condition.claimType = req.body.claimType;
 	if (req.body.division) condition.divisionId = parseInt(req.body.division);
 	if (req.body.month) condition.claimMonth = parseInt(req.body.month);
@@ -495,10 +509,18 @@ exports.getApprovedClaim = (req, res) => {
 		else if (req.body.status === 'rejectedHo') condition.hoStatus = 2;
 		else if (req.body.status === 'rejected') condition.ho1Status = 2; */
 	}
+	console.log('getApprovedClaim---', condition);
 
 	Claim.aggregate([
 		{
 			$match: condition
+		}, {
+			$lookup: {
+				from: "com_stockiests",
+				localField: "customerId",
+				foreignField: "customerId",
+				as: "stockiest"
+			}
 		}, {
 			$lookup: {
 				from: "cn_claim_files",
