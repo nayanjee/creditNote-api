@@ -15,7 +15,6 @@ exports.getAll = function (req, res) {
   });
 };
 
-
 exports.stockiestByIds = function (req, res) {
   Stockiest.find({ customerId: { $in: req.body } }, (error, result) => {
     if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
@@ -24,7 +23,6 @@ exports.stockiestByIds = function (req, res) {
     res.status(200).send({ status: 200, message: 'Success', data: result });
   });
 }
-
 
 exports.importStockiest = async (req, res) => {
   try {
@@ -101,7 +99,6 @@ let convertExcelToJson = (fileName) => {
 };
 
 exports.distributorStockiest = function (req, res) {
-
   Stockiest.find({ plant: req.body.plant, isActive: true, isDeleted: false }, (error, result) => {
     if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
     if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
@@ -111,7 +108,6 @@ exports.distributorStockiest = function (req, res) {
 };
 
 exports.add = (req, res) => {
-
   Stockiest.findOne({ customerId: req.body.customerid }, (error, result) => {
     if (error) return res.status(200).send({ status: 400, message: 'problemFindingRecord' });
     if (result) return res.status(200).send({ status: 400, message: 'Customer ID already exist, please enter valid number.' });
@@ -130,6 +126,7 @@ exports.add = (req, res) => {
   });
 
 };
+
 exports.getStockiestById = function (req, res) {
   Stockiest.findOne({ _id: mongoose.Types.ObjectId(req.params.id) }, (error, result) => {
     if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
@@ -142,7 +139,6 @@ exports.getStockiestById = function (req, res) {
 
 
 // exports.edit = function (req, res) {
-
 //   const newplantcode = Number(req.body.plant);
 //   const oldplantcode = Number(req.body.oldplantcode);
 //   const newcustomerId = Number(req.body.customerid);
@@ -156,7 +152,6 @@ exports.getStockiestById = function (req, res) {
 //   }
 //   if (newplantcode != oldplantcode) {
 //     Stockiest.findOne({ plant: newplantcode }, (error, result) => {
-
 //       // console.log('plant===========>', req.body);
 //       // console.log('plant error', error);
 //       // console.log('plant result', result);
@@ -173,7 +168,6 @@ exports.getStockiestById = function (req, res) {
 //     });
 //   }
 //   else if (newcustomerId != oldcustomerId) {
-
 //     Stockiest.findOne({ customerId: newcustomerId }, (errcus, rescus) => {
 //       // console.log('customer===========>', req.body);
 //       // console.log('customer error', errcus);
@@ -187,10 +181,8 @@ exports.getStockiestById = function (req, res) {
 //           res.status(200).send({ status: 200, message: "success", data: [] });
 //         }
 //       });
-
 //     });
-//   }
-//   else {
+//   } else {
 //     console.log('else====>', req.body);
 //     Stockiest.findByIdAndUpdate(req.body._id, reqData).exec((errsuc, success) => {
 //       if (errsuc) {
@@ -200,16 +192,14 @@ exports.getStockiestById = function (req, res) {
 //       }
 //     });
 //   }
-
-
 // };
 
 exports.edit = function (req, res) {
-
   const newplantcode = Number(req.body.plant);
   const oldplantcode = Number(req.body.oldplantcode);
   const newcustomerId = Number(req.body.customerid);
   const oldcustomerId = Number(req.body.oldcustomerId);
+
   const reqData = {
     plant: newplantcode,
     customerId: newcustomerId,
@@ -217,8 +207,8 @@ exports.edit = function (req, res) {
     isActive: req.body.status,
     updatedBy: mongoose.Types.ObjectId(req.body.loggedUserId)
   }
-  if (newcustomerId != oldcustomerId) {
 
+  if (newcustomerId != oldcustomerId) {
     Stockiest.findOne({ customerId: newcustomerId }, (errcus, rescus) => {
       // console.log('customer===========>', req.body);
       // console.log('customer error', errcus);
@@ -234,9 +224,7 @@ exports.edit = function (req, res) {
       });
 
     });
-  }
-  else {
-    console.log('else====>', req.body);
+  } else {
     Stockiest.findByIdAndUpdate(req.body._id, reqData).exec((errsuc, success) => {
       if (errsuc) {
         return res.status(200).send({ status: 400, message: "somethingWrong" });
@@ -245,9 +233,8 @@ exports.edit = function (req, res) {
       }
     });
   }
-
-
 };
+
 exports.getdistinctplan = function (req, res, next) {
   Stockiest.distinct('plant', (error, result) => {
     if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
