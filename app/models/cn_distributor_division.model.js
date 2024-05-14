@@ -7,12 +7,12 @@ const DistributorDivisionSchema = new mongoose.Schema({
     ref: "gen_user",
     default: null
   },
-	plant: {
+  plant: {
     type: Number,
     default: 0
   },
-	divisions: [],
-	isActive: {
+  divisions: [],
+  isActive: {
     type: Boolean,
     default: true
   },
@@ -31,7 +31,7 @@ const DistributorDivisionSchema = new mongoose.Schema({
     default: null
   }
 }, {
-    timestamps: true
+  timestamps: true
 });
 
 mongoose.model('cn_distributor_division', DistributorDivisionSchema);
