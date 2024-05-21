@@ -28,6 +28,13 @@ exports.getUserById = (req, res) => {
       }
     }, {
       $lookup: {
+        from: "cn_emp_dist_stockist_divisions",
+        localField: "_id",
+        foreignField: "userId",
+        as: "cn_emp_dist_stockist_divisions"
+      }
+    }, {
+      $lookup: {
         from: "gen_permissions",
         localField: "_id",
         foreignField: "userId",
@@ -202,7 +209,6 @@ exports.edituser = (req, res) => {
       name: req.body.username,
       email: req.body.email,
       code: req.body.code,
-      password: bcrypt.hashSync('123456', 8),
       userType: req.body.userType,
       portals: mongoose.Types.ObjectId(req.body.portalId),
       updatedBy: mongoose.Types.ObjectId(req.body.loggedUserId)
@@ -233,7 +239,6 @@ exports.edituser = (req, res) => {
           if (psuc) {
             if (req.body.userType === 'distributor') {
               const dicdivData = {
-                userId: suc._id,
                 plant: req.body.code,
                 divisions: req.body.divisions,
                 updatedBy: mongoose.Types.ObjectId(req.body.loggedUserId)
@@ -253,6 +258,24 @@ exports.edituser = (req, res) => {
                 if (perr) return res.status(500).send({ status: 400, message: 'somethingWrong' });
                 res.status(200).send({ status: 200, message: 'updated', data: psuc });
               });
+            } else if (req.body.userType === 'ho' || req.body.userType === 'field') {
+              EmpDistStockistDivision.deleteMany({ userId: req.body._id }).then(function (derr, dres) {
+                console.log("DistStockDivi deleted"); // Success
+              });
+              req.body.distributors.forEach((element, index) => {
+
+                EmpDistStockistDivision.create({
+                  userId: req.body._id,
+                  empCode: req.body.code,
+                  plant: element,
+                  divisions: req.body.divisions[index],
+                  stockists: req.body.stockists[index],
+                  createdBy: mongoose.Types.ObjectId(req.body.loggedUserId)
+                }, (derr, dsuc) => { });
+              });
+              res.status(200).send({ status: 200, message: 'added', data: suc });
+            } else {
+              res.status(200).send({ status: 200, message: 'added', data: suc });
             }
           }
 
