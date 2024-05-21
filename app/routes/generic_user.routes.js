@@ -34,5 +34,7 @@ module.exports = function (app) {
   app.get("/api/user/getStockistDistDivision/:userId", controller.getStockistDistDivision);
 
   app.post("/api/user/createuser", controller.createuser);
+  app.post("/api/user/edituser", controller.edituser);
   app.post("/api/user/getUserByCodes", controller.getUserByCodes);
 };
+
