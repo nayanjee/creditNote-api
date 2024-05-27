@@ -27,7 +27,10 @@ module.exports = function(app) {
   app.post("/api/sales/remainingQuantity", controller.remainingQuantity);
   app.post("/api/sales/allocateQuantity", controller.allocateQuantity);
   app.post("/api/sales/allocatedQuantity", controller.allocatedQuantity);
+  app.post("/api/sales/allocateHoQuantity", controller.allocateHoQuantity);
+  app.post("/api/sales/allocatedHoQuantity", controller.allocatedHoQuantity);
   
   app.post("/api/remaining/findUpdateRemaining", controller.findUpdateRemaining);
+  app.post("/api/remaining/findUpdateHoRemaining", controller.findUpdateHoRemaining);
   app.post("/api/remaining/updateRemainingLog", controller.updateRemainingLog);
 };

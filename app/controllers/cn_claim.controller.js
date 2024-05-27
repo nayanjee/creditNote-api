@@ -71,15 +71,13 @@ exports.create = function (req, res) {
 
 			// Seperate all the value from header and specify it
 			const plant = explodeHeader[0];
+			const customerId = explodeHeader[1];
 			const claimType = explodeHeader[2];
 			const claimMonth = explodeHeader[3];
 			const claimYear = explodeHeader[4];
 			const userId = explodeHeader[5];
 			const userType = explodeHeader[6];
-
-			//let customerId = 0;
-			const customerId =  (userType === 'distributor') ? 0 : explodeHeader[1];
-
+			
 			for (var i = 0; i < totRecords; i++) {
 				let enterData = [];
 				let explodeImage = [];

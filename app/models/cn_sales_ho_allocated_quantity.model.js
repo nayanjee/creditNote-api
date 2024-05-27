@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const SalesAllocatedQuantitySchema = new mongoose.Schema({
+const SalesHoAllocatedQuantitySchema = new mongoose.Schema({
     claimId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "cn_claim",
@@ -11,11 +11,11 @@ const SalesAllocatedQuantitySchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    stkInvoiceNo: {
+    distInvoiceNo: {
         type: String,
         default: null
     },
-    stkInvoiceQty: {
+    distInvoiceQty: {
         type: Number,
         default: 0
     },
@@ -27,5 +27,5 @@ const SalesAllocatedQuantitySchema = new mongoose.Schema({
     timestamps: true
 });
 
-mongoose.model('cn_sales_allocated_quantity', SalesAllocatedQuantitySchema);
-module.exports = mongoose.model('cn_sales_allocated_quantity');
+mongoose.model('cn_sales_ho_allocated_quantity', SalesHoAllocatedQuantitySchema);
+module.exports = mongoose.model('cn_sales_ho_allocated_quantity');
