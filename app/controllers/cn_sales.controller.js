@@ -10,6 +10,8 @@ const Sales = db.cn_sales;
 const SalesHo = db.cn_sales_ho;
 const SalesRemaining = db.cn_sales_remaining_quantity;
 const AllocatedQuantity = db.cn_sales_allocated_quantity;
+const SalesHoRemaining = db.cn_sales_ho_remaining_quantity;
+const AllocatedHoQuantity = db.cn_sales_ho_allocated_quantity;
 
 exports.findRemainingUpsert = (req, res) => {
 	const condition = {
@@ -32,45 +34,103 @@ exports.findRemainingUpsert = (req, res) => {
 	});
 }
 
-exports.allocateQuantity = (req, res) => {
+exports.allocateHoQuantity = (req, res) => {
 	req.body.forEach((element, index) => {
-  	SalesRemaining.findOne({
-  		billDocNumber: element.stkInvoice,
-  		billToParty: element.customerId,
+  	SalesHoRemaining.findOne({
+  		billDocNumber: element.distInvoice,
+  		//billToParty: element.customerId,
   		batch: element.batch
   	}, (error, result) => {
   		if (result) {
   			const updatedQty = result.quantity - element.saleQuantity;
+  			SalesHoRemaining.updateOne({_id: result._id}, {quantity: updatedQty}, async function (err, res) {
+    			if (res) {
+    				if (element.saleQuantity > 0) {
+	    				const reqData = {
+					  		claimId: element.claimId,
+					  		billToParty: element.customerId,
+					  		distInvoiceNo: element.distInvoice,
+					  		distInvoiceQty: element.distInvQty,
+					  		stkInvoiceNo: element.stkInvoice,
+					  		stkInvoiceQty: element.stkInvoiceQty,
+					  		allocatedQty: element.saleQuantity
+					  	}
+					  	AllocatedHoQuantity.create(reqData);
+					  }
+    			}
+    		});
+			} else {
+				const quantity = element.distInvQty - element.saleQuantity;
+				SalesHoRemaining.create({
+					billDocNumber: element.distInvoice,
+					//billToParty: element.customerId,
+					batch: element.batch,
+					quantity: quantity
+				}, async function (err, res) {
+					if (res) {
+						if (element.saleQuantity > 0) {
+	    				const reqData = {
+					  		claimId: element.claimId,
+					  		billToParty: element.customerId,
+					  		distInvoiceNo: element.distInvoice,
+					  		distInvoiceQty: element.distInvQty,
+					  		allocatedQty: element.saleQuantity
+					  	}
+					  	AllocatedHoQuantity.create(reqData);
+					  }
+    			}
+				});
+			}
+  	});
+  });
+  res.status(200).send({ status: 200, message: 'Success', data: [] });
+}
+
+exports.allocateQuantity = (req, res) => {
+	req.body.forEach((element, index) => {
+  	SalesRemaining.findOne({
+  		billDocNumber: element.stkInvoice,
+  		//billToParty: element.customerId,
+  		batch: element.batch
+  	}, (error, result) => {
+  		if (result) {
+  			const updatedQty = result.quantity - element.saleQuantity;
+  			console.log('updatedQty1--', updatedQty);
   			SalesRemaining.updateOne({_id: result._id}, {quantity: updatedQty}, async function (err, res) {
     			if (res) {
     				const reqData = {
 				  		claimId: element.claimId,
+				  		billToParty: element.customerId,
 				  		distInvoiceNo: element.distInvoice,
 				  		distInvoiceQty: element.distInvQty,
 				  		stkInvoiceNo: element.stkInvoice,
 				  		stkInvoiceQty: element.stkInvoiceQty,
 				  		allocatedQty: element.saleQuantity
 				  	}
+				  	console.log('reqData1--', reqData);
 				  	AllocatedQuantity.create(reqData);
     			}
     		});
 			} else {
 				const quantity = element.stkInvoiceQty - element.saleQuantity;
+				console.log('updatedQty2--', quantity);
 				SalesRemaining.create({
 					billDocNumber: element.stkInvoice,
-					billToParty: element.customerId,
+					//billToParty: element.customerId,
 					batch: element.batch,
 					quantity: quantity
 				}, async function (err, res) {
 					if (res) {
     				const reqData = {
 				  		claimId: element.claimId,
+				  		billToParty: element.customerId,
 				  		distInvoiceNo: element.distInvoice,
 				  		distInvoiceQty: element.distInvQty,
 				  		stkInvoiceNo: element.stkInvoice,
 				  		stkInvoiceQty: element.stkInvoiceQty,
 				  		allocatedQty: element.saleQuantity
 				  	}
+				  	console.log('reqData2--', reqData);
 				  	AllocatedQuantity.create(reqData);
     			}
 				});
@@ -92,7 +152,55 @@ exports.allocatedQuantity = (req, res) => {
 	});
 }
 
+exports.allocatedHoQuantity = (req, res) => {
+	AllocatedHoQuantity.find({claimId: req.body._id}, (error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) {
+			res.status(200).send({ status: 200, message: 'Success', data: [] });
+
+		} else {
+			res.status(200).send({ status: 200, message: 'Success', data: result });
+		}
+	});
+}
+
 exports.remainingQuantity = (req, res) => {
+	const condition = {
+		billToParty: parseInt(req.body.customerId),
+		batch: req.body.batch,
+		billDocType: 'ZDLF'
+	};
+	console.log('condition==', condition);
+
+	Sales.aggregate([
+		{
+			$match: condition
+		}, {
+			$lookup: {
+				from: "cn_sales_remaining_quantities",
+				localField: "billDocNumber",
+				foreignField: "billDocNumber",
+				as: "remainingData"
+			} 
+		}, {
+			$lookup: {
+				from: "com_distributors",
+				localField: "plant",
+				foreignField: "plant",
+				as: "distCustomerIds"
+			}
+	 	}, {
+			$sort: { billDocDate: 1 }
+	 	}
+	]).exec((error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	});
+}
+
+/*exports.remainingQuantity = (req, res) => {
 	const condition = {
 		billToParty: parseInt(req.body.customerId),
 		batch: req.body.batch,
@@ -125,7 +233,7 @@ exports.remainingQuantity = (req, res) => {
 
 		res.status(200).send({ status: 200, message: 'Success', data: result });
 	});
-}
+}*/
 
 exports.hoInvoice = (req, res) => {
 	const today = moment().format("YYYY-MM-DDT00:00:00.000[Z]");
@@ -142,12 +250,32 @@ exports.hoInvoice = (req, res) => {
 	};
 	console.log('hoInvoice condition---', condition);
 
-	SalesHo.findOne(condition, (error, result) => {
+	SalesHo.aggregate([
+		{
+			$match: condition
+		}, {
+			$lookup: {
+				from: "cn_sales_ho_remaining_quantities",
+				localField: "billDocNumber",
+				foreignField: "billDocNumber",
+				as: "remainingData"
+			} 
+		}, {
+			$sort: { billDocDate: 1 }
+	 	}
+	]).exec((error, result) => {
 		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
 		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
 
 		res.status(200).send({ status: 200, message: 'Success', data: result });
 	});
+
+	/*SalesHo.findOne(condition, (error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	});*/
 }
 
 exports.updateRemainingLog = (req, res) => {
@@ -179,10 +307,10 @@ exports.updateRemainingLog = (req, res) => {
 exports.findUpdateRemaining = (req, res) => {
 	const condition = {
 		billDocNumber: req.body.billDocNumber,
-		billToParty: req.body.billToParty,
+		//billToParty: req.body.billToParty,
 		batch: req.body.batch
 	}
-	
+
 	SalesRemaining.findOne(condition, (error, result) => {
 		if (result) {
 			const quantity = result['quantity'] + req.body['allocatedQty'];
@@ -191,6 +319,30 @@ exports.findUpdateRemaining = (req, res) => {
 			}
 			SalesRemaining.updateOne({_id: result._id}, reqData, async function (err, res) {
 				AllocatedQuantity.deleteMany({ claimId: req.body.claimId }).then(function(derr, dres){
+    			console.log("Allocated quantity deleted"); // Success
+				});
+				
+  			//res.status(200).send({ status: 200, message: 'Success', data: [] });
+  		});
+		}
+	});
+};
+
+exports.findUpdateHoRemaining = (req, res) => {
+	const condition = {
+		billDocNumber: req.body.billDocNumber,
+		//billToParty: req.body.billToParty,
+		batch: req.body.batch
+	}
+
+	SalesHoRemaining.findOne(condition, (error, result) => {
+		if (result) {
+			const quantity = result['quantity'] + req.body['allocatedQty'];
+			const reqData = {
+				quantity: quantity
+			}
+			SalesHoRemaining.updateOne({_id: result._id}, reqData, async function (err, res) {
+				AllocatedHoQuantity.deleteMany({ claimId: req.body.claimId }).then(function(derr, dres){
     			console.log("Allocated quantity deleted"); // Success
 				});
 				

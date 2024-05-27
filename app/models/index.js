@@ -42,6 +42,8 @@ db.cn_distributor_division = require("./cn_distributor_division.model");
 db.cn_emp_dist_stockist_division = require("./cn_emp_dist_stockist_division.model");
 db.cn_sales_remaining_quantity = require("./cn_sales_remaining_quantity.model");
 db.cn_sales_allocated_quantity = require("./cn_sales_allocated_quantity.model");
+db.cn_sales_ho_remaining_quantity = require("./cn_sales_ho_remaining_quantity.model");
+db.cn_sales_ho_allocated_quantity = require("./cn_sales_ho_allocated_quantity.model");
 
 
 module.exports = db;

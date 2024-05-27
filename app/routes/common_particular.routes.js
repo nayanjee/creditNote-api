@@ -24,4 +24,5 @@ module.exports = function(app) {
   app.get("/api/category/all", controller.getAllCategory);
 
   app.get("/api/particulars/all", controller.getAll);
+  app.get("/api/particulars/:name", controller.getParticularsByName);
 };
