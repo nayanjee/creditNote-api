@@ -589,11 +589,13 @@ exports.saveClaimPurchaseOrder = (req, res) => {
 
 exports.checkDuplicacy = (req, res) => {
 	const condition = {
+		_id: { $ne: req.body.id },
 		plant: parseInt(req.body.plant),
 	    batch: req.body.batch,
 	    invoice: req.body.invoice,
 	    material: parseInt(req.body.material),
-	    customerId: parseInt(req.body.customerId)
+	    customerId: parseInt(req.body.customerId),
+	    ho1Status: 1
 	};
 
 	Claim.findOne(condition, (error, result) => {
