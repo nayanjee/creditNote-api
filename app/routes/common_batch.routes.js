@@ -23,6 +23,11 @@ module.exports = function(app) {
 
 
   app.get("/api/batch/all", controller.getAll);
+  app.get("/api/batch/allBatch", controller.allBatch);
+  app.get("/api/batchByMaterial/:material", controller.getBatchByMaterial);
 
   app.post("/api/batchImport", controller.importBatch);
+  app.post("/api/batch/condition", controller.conditionalBatch);
+  //app.post("/api/batch/count", controller.batchCount);
+  //app.post("/api/batch/limitedData", controller.limitedData);
 };

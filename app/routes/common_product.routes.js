@@ -24,6 +24,7 @@ module.exports = function(app) {
 
   app.get("/api/product/all", controller.getAll);
   app.get("/api/product/:material", controller.getProductById);
+  app.get("/api/productByDivision/:division", controller.getProductByDivision);
 
   app.post("/api/productImport", controller.importProduct);
 };
