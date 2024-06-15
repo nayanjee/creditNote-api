@@ -38,6 +38,41 @@ const getSetting = () => {
   });
 };
 
+exports.allBatch = async function (req, res) {
+	const condition = {
+		isActive: true, 
+		isDeleted: false,
+		batch: { $ne: '' }
+	};
+
+	Batch.find(condition, (error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+		console.log(result)
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	}).sort({ batch: 1 });
+};
+
+exports.conditionalBatch = async function (req, res) {
+	console.log(req.body.condition);
+	Batch.find(req.body.condition, (error, result) => {
+		if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+		if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+		//console.log(result)
+
+		res.status(200).send({ status: 200, message: 'Success', data: result });
+	}).sort({ batch: 1 });
+}
+
+exports.getBatchByMaterial = function (req, res) {
+  Batch.find({ material: req.params.material }, (error, result) => {
+    if (error) return res.status(400).send({ status: 400, message: 'problemFindingRecord' });
+    if (!result) return res.status(200).send({ status: 400, message: 'noRecord' });
+
+    res.status(200).send({ status: 200, message: 'Success', data: result });
+  });
+};
 
 exports.importBatch = async (req, res) => {
   try {
